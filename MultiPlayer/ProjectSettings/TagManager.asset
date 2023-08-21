@@ -38,6 +38,21 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 499440359
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Terrain
+    uniqueID: 3622778667
+    locked: 0
+  - name: Coin
+    uniqueID: 809526569
+    locked: 0
+  - name: Player
+    uniqueID: 743923177
+    locked: 0
+  - name: UI
+    uniqueID: 175096245
     locked: 0
