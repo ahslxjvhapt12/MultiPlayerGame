@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Feedback : MonoBehaviour
+public abstract class Feedback : MonoBehaviour
 {
+    public abstract void CreateFeedback();
+    public abstract void CompleteFeedback();
+
+    protected virtual void OnDestroy()
+    {
+        CompleteFeedback();
+    }
+    
+    protected virtual void Ondisable()
+    {
+        CompleteFeedback();
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProjectileLauncher : NetworkBehaviour
 {
@@ -20,6 +21,7 @@ public class ProjectileLauncher : NetworkBehaviour
     private bool _shouldFire;
     private float _prevFireTime;
 
+    public UnityEvent OnFire;
 
     public override void OnNetworkSpawn()
     {
@@ -83,6 +85,7 @@ public class ProjectileLauncher : NetworkBehaviour
         instance.transform.up = dir; // 미사일을 해당 방향으로 회전시키다.
         Physics2D.IgnoreCollision(_playerCollider, instance.GetComponent<Collider2D>());
 
+        OnFire?.Invoke();
         if (instance.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody))
         {
             rigidbody.velocity = rigidbody.transform.up * _projectileSpeed;
