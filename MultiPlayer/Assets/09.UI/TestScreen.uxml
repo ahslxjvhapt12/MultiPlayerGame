@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="Container">
         <ui:VisualElement name="ButtonBox" style="position: absolute; right: 20px; top: 20px;">
-            <ui:Button text="호스트" display-tooltip-when-elided="true" name="HostBtn" style="-unity-font-style: normal; font-size: 40px;" />
-            <ui:Button text="클라이언트" display-tooltip-when-elided="true" name="ClientBtn" style="font-size: 40px;" />
+            <ui:Button text="HOST" display-tooltip-when-elided="true" name="HostBtn" style="-unity-font-style: normal; font-size: 40px;" />
+            <ui:Button text="CLIENT" display-tooltip-when-elided="true" name="ClientBtn" style="font-size: 40px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
