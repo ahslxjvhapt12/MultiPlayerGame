@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,19 +12,18 @@ public class CoinSpawner : NetworkBehaviour
 {
     [Header("참조 값")]
     [SerializeField] private RespawningCoin _coinPrefab;
+    [SerializeField] private DecalCircle _decalCircle;
 
     [Header("세팅 값")]
     [SerializeField] private int _maxCoins = 30;
     [SerializeField] private int _coinValue = 10; // 코인당 10개
-    [SerializeField] private LayerMask _whatIsObastacle;
     [SerializeField] private float _spawningTerm = 30f;
-    [SerializeField] private float _spawningRadius = 8f;
 
     private bool _isSpawning = false;
     private float _spawningTime = 0;
     private int _spawnCountTime = 10; // 10초 카운팅하고 시작
 
-    public List<Transform> spawnPointList; // 코인이 스폰될 지점의 리스트
+    public List<SpawnPoint> spawnPointList; // 코인이 스폰될 지점의 리스트
     private float _coinRadius;
 
     private Stack<RespawningCoin> _coinPool = new Stack<RespawningCoin>(); // 코인 풀
@@ -89,9 +90,11 @@ public class CoinSpawner : NetworkBehaviour
         _isSpawning = true;
 
         int pointIdx = Random.Range(0, spawnPointList.Count);
-        int coinCount = Random.Range(_maxCoins / 2, _maxCoins + 1);
 
-        Vector2 center = spawnPointList[pointIdx].position;
+        var point = spawnPointList[pointIdx];
+        int maxCoinCount = Mathf.Min(_maxCoins + 1, point.spawnPointList.Count);
+        int coinCount = Random.Range(maxCoinCount / 2, maxCoinCount);
+
         for (int i = _spawnCountTime; i > 0; i--)
         {
             ServerCountDownMessageClientRpc(i, pointIdx, coinCount);
@@ -100,7 +103,13 @@ public class CoinSpawner : NetworkBehaviour
 
         for (int i = 0; i < coinCount; i++)
         {
-            Vector2 pos = Random.insideUnitCircle * _spawningRadius + center;
+            int end = point.spawnPointList.Count - i - 1;
+            int idx = Random.Range(0, end + 1);
+
+            Vector2 pos = point.spawnPointList[idx];
+
+            (point.spawnPointList[idx], point.spawnPointList[end]) = (point.spawnPointList[end], point.spawnPointList[idx]);
+
             var coin = _coinPool.Pop();
             coin.transform.position = pos;
             coin.Reset();
@@ -108,12 +117,24 @@ public class CoinSpawner : NetworkBehaviour
             yield return new WaitForSeconds(4f);
         }
         _isSpawning = false;
+        CloseDecalCircleClientRPC(); // 클라이언트에서 닫아 질꺼다
+    }
+
+    [ClientRpc]
+    private void CloseDecalCircleClientRPC()
+    {
+        _decalCircle.CloseCircle();
     }
 
     [ClientRpc]
     private void ServerCountDownMessageClientRpc(int sec, int pointIdx, int coinCount)
     {
-        Debug.Log($"{pointIdx} 번 지점에서 {sec} 초 후 {coinCount} 개의 코인이 생성됩니다.");
+        var point = spawnPointList[pointIdx];
+        if (!_decalCircle.showDecal)
+        {
+            _decalCircle.OpenCircle(point.Position, point.Radius);
+        }
+        Debug.Log($"{point.pointName} 번 지점에서 {sec} 초 후 {coinCount} 개의 코인이 생성됩니다.");
     }
 
     #endregion

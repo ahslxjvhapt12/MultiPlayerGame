@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8579082212980305248}
   - component: {fileID: 1104340235285443022}
   - component: {fileID: 8258738393987076007}
+  - component: {fileID: 3632140258015373148}
   m_Layer: 6
   m_Name: ProjectileBase
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4cd7f486c17c2f4b830acea495c16ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3632140258015373148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5943534921252825796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2a5576cffb4154e9915d3fc3128a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 0}
