@@ -1,0 +1,22 @@
+.btn {
+    background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=2800000&guid=e3681d0c635b0ab41a42bddd6ff9f1d1&type=3#Frame');
+    -unity-slice-left: 100;
+    -unity-slice-top: 100;
+    -unity-slice-right: 100;
+    -unity-slice-bottom: 100;
+    color: rgba(0, 0, 0, 255);
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-outline-width: 1px;
+    background-color: rgba(255, 255, 255, 255);
+    padding-left: 4px;
+    padding-right: 12px;
+    padding-top: 4px;
+    padding-bottom: 12px;
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
+
+.btn:hover {
+    -unity-background-image-tint-color: rgba(255, 0, 0, 255);
+    transition-duration: 0.4s;
+}

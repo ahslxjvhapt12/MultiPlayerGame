@@ -1,0 +1,19 @@
+#container {
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#menu-box {
+    flex-basis: 700px;
+}
+
+.menu-row {
+    flex-direction: row;
+    flex-basis: 65px;
+    margin-bottom: 9px;
+}
+
+.menu-row > * {
+    font-size: 20px;
+}

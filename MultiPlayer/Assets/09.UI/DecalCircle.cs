@@ -1,9 +1,5 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Il2Cpp;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class DecalCircle : MonoBehaviour
 {
