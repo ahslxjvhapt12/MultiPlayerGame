@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -9,6 +10,8 @@ public class MenuScreen : MonoBehaviour
 {
     private TextField _txtIpAdress;
     private TextField _txtPort;
+    private TextField _txtJoinCode;
+
 
     private UIDocument _uiDocument;
     private const string GameSceneName = "Game";
@@ -24,9 +27,23 @@ public class MenuScreen : MonoBehaviour
         var root = _uiDocument.rootVisualElement;
         _txtIpAdress = root.Q<TextField>("txt-ip-address");
         _txtPort = root.Q<TextField>("txt-port");
+        _txtJoinCode = root.Q<TextField>("txt-joincode");
 
         root.Q<Button>("btn-local-host").RegisterCallback<ClickEvent>(OnHandleLocalHost);
         root.Q<Button>("btn-local-client").RegisterCallback<ClickEvent>(OnHandleLocalClient);
+        root.Q<Button>("btn-relay-host").RegisterCallback<ClickEvent>(OnHandleRelayHost);
+        root.Q<Button>("btn-joincode").RegisterCallback<ClickEvent>(OnHandleRelayJoin);
+    }
+
+    private async void OnHandleRelayJoin(ClickEvent evt)
+    {
+        string code = _txtJoinCode.value;
+        await ClientSingletone.Instance.GameManager.StartClientAsync(code);
+    }
+
+    private async void OnHandleRelayHost(ClickEvent evt)
+    {
+        await HostSingletone.Instance.GameManager.StartHostAsync();
     }
 
     private void OnDisable()
