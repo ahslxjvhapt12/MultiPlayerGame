@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=14429dbecf605c34986c6a60467f3311&amp;type=3#Common" />
+    <ui:VisualElement name="container" style="align-items: center; justify-content: center; flex-direction: column; flex-wrap: nowrap; flex-grow: 1; -unity-font-style: bold; -unity-text-align: upper-center;">
+        <ui:VisualElement name="input-panel" style="flex-basis: auto; flex-grow: 0.3; flex-direction: column; flex-shrink: 1; width: auto; font-size: 0;">
+            <ui:Label text="Input your ID" display-tooltip-when-elided="true" name="info-label" style="flex-grow: 1; flex-shrink: 1; flex-basis: 0; font-size: 50px; width: 500px; -unity-text-outline-width: 2px; -unity-text-outline-color: rgb(0, 0, 0); margin-bottom: 10px; -unity-text-align: middle-center;" />
+            <ui:TextField picking-mode="Ignore" name="name-text-field" style="flex-basis: 0; flex-grow: 1; flex-direction: row; flex-shrink: 1; margin-bottom: 10px; color: rgb(0, 0, 0); font-size: 10px;" />
+            <ui:Button text="Button" display-tooltip-when-elided="true" name="btn-connect" class="btn" style="background-image: url(&apos;project://database/Assets/04.Sprites/Frame.png?fileID=2800000&amp;guid=e3681d0c635b0ab41a42bddd6ff9f1d1&amp;type=3#Frame&apos;); -unity-slice-left: 50; -unity-slice-top: 50; -unity-slice-right: 50; -unity-slice-bottom: 50; color: rgb(255, 0, 17); flex-grow: 1; flex-basis: 0; font-size: 50px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

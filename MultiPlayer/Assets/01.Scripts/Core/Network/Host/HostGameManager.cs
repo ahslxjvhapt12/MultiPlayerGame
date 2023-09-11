@@ -20,6 +20,8 @@ public class HostGameManager
     private string _lobbyId;
     private Allocation _allocation;
 
+    private NetworkServer _networkServer;
+
     public async Task StartHostAsync()
     {
         try
@@ -69,7 +71,7 @@ public class HostGameManager
             Debug.LogError(ex); // UI로 알아서 하셈
             return; 
         }
-
+        _networkServer = new NetworkServer(NetworkManager.Singleton);
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
     }
