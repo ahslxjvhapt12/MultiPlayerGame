@@ -34,8 +34,8 @@ public class UserData
         count += sizeof(ushort);
 
         byte[] authArr = Encoding.UTF8.GetBytes(userAuthId);
-        Array.Copy(authArr, 0, segment.Array, count, nameLen);
-        count += nameLen;
+        Array.Copy(authArr, 0, segment.Array, count, authLen);
+        count += authLen;
 
         // username을 UTF8 방식으로 인코딩했을때 바이트 배열을 만들어 준다.
         //byte[] strBuffer = Encoding.UTF8.GetBytes(username);
@@ -56,10 +56,12 @@ public class UserData
     public void Deserialize(byte[] payload)
     {
         int count = 0;
-        ushort nameLen = BitConverter.ToUInt16(payload, count); // 앞에 2바이트만 잘라서 변환
+        ushort nameLen = BitConverter.ToUInt16(payload, count);
         count += sizeof(ushort);
         username = Encoding.UTF8.GetString(payload, count, nameLen);
         count += nameLen;
+
+        Debug.Log(payload);
 
         ushort authLen = BitConverter.ToUInt16(payload, count);
         count += sizeof(ushort);
