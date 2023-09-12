@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
@@ -12,7 +13,7 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HostGameManager
+public class HostGameManager : IDisposable
 {
     private const string GameSceneName = "Game";
     private const int _maxConnections = 20;
@@ -21,6 +22,30 @@ public class HostGameManager
     private Allocation _allocation;
 
     private NetworkServer _networkServer;
+
+    public async void Shutdown()
+    {
+        HostSingletone.Instance.StopCoroutine(nameof(HeartBeatLobby));
+        if (!string.IsNullOrEmpty(_lobbyId))
+        {
+            try
+            {
+                await Lobbies.Instance.DeleteLobbyAsync(_lobbyId);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+
+        _lobbyId = string.Empty;
+        _networkServer?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        Shutdown();
+    }
 
     public async Task StartHostAsync()
     {
@@ -49,6 +74,8 @@ public class HostGameManager
         var relayServerData = new RelayServerData(_allocation, "dtls");
         transport.SetRelayServerData(relayServerData);
 
+        string playerName = PlayerPrefs.GetString(BootstrapScreen.PlayerNameKey, "Unknown");
+
         try
         {
             CreateLobbyOptions option = new CreateLobbyOptions();
@@ -60,7 +87,7 @@ public class HostGameManager
                 }
             };
 
-            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync("Dummy lobby", _maxConnections, option);
+            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync($"{playerName}'s lobby", _maxConnections, option);
 
             _lobbyId = lobby.Id;
 
@@ -69,9 +96,17 @@ public class HostGameManager
         catch (LobbyServiceException ex)
         {
             Debug.LogError(ex); // UI로 알아서 하셈
-            return; 
+            return;
         }
         _networkServer = new NetworkServer(NetworkManager.Singleton);
+
+        UserData userData = new UserData()
+        {
+            username = playerName,
+            userAuthId = AuthenticationService.Instance.PlayerId
+        };
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = userData.Serialize().ToArray();
+
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
     }
