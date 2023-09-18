@@ -21,7 +21,8 @@ public class HostGameManager : IDisposable
     private string _lobbyId;
     private Allocation _allocation;
 
-    private NetworkServer _networkServer;
+
+    public NetworkServer NetworkServer { get; private set; }
 
     public async void Shutdown()
     {
@@ -39,7 +40,7 @@ public class HostGameManager : IDisposable
         }
 
         _lobbyId = string.Empty;
-        _networkServer?.Dispose();
+        NetworkServer?.Dispose();
     }
 
     public void Dispose()
@@ -98,7 +99,7 @@ public class HostGameManager : IDisposable
             Debug.LogError(ex); // UI로 알아서 하셈
             return;
         }
-        _networkServer = new NetworkServer(NetworkManager.Singleton);
+        NetworkServer = new NetworkServer(NetworkManager.Singleton);
 
         UserData userData = new UserData()
         {

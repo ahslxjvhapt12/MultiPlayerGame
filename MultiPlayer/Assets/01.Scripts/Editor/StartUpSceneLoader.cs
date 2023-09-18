@@ -17,7 +17,7 @@ public class StartUpSceneLoader
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
         }
 
-        if (state == PlayModeStateChange.EnteredEditMode)
+        if (state == PlayModeStateChange.EnteredPlayMode)
         {
             // 실제 씬을 첫번째 씬으로 돌린다
             if (EditorSceneManager.GetActiveScene().buildIndex != 0)

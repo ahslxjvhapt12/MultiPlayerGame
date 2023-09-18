@@ -1,0 +1,36 @@
+#leaderboard {
+    background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=2800000&guid=e3681d0c635b0ab41a42bddd6ff9f1d1&type=3#Frame');
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    width: 350px;
+    height: 400px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#inner-holder {
+}
+
+.board-item {
+    padding-left: 20px;
+    background-image: url('project://database/Assets/04.Sprites/Plate.png?fileID=2800000&guid=8c047446bddecdc49b5528ddb1900b09&type=3#Plate');
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    margin-bottom: 1px;
+    margin-top: 5px;
+}
+
+.board-item > #board-label {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 255);
+    -unity-font-style: bold;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgba(0, 0, 0, 255);
+    text-overflow: ellipsis;
+}

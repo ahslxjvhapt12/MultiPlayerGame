@@ -1,3 +1,4 @@
+using DG.Tweening.Plugins.Options;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -29,6 +30,9 @@ public class NetworkServer : IDisposable
         _authToUserDataDictionary[data.userAuthId] = data;
 
         res.Approved = true;
+        Vector3 temp = TankSpawnPoint.GetRandomSpawnPos(); // 켜진 위치중 랜덤한 위치
+        res.Position = temp;
+        res.Rotation = Quaternion.identity;
         res.CreatePlayerObject = true;
     }
 
@@ -58,5 +62,17 @@ public class NetworkServer : IDisposable
         {
             _networkManager.Shutdown();
         }
+    }
+
+    public UserData GetUserDataByClientID(ulong clientId)
+    {
+        if (_clientToAuthDictionary.TryGetValue(clientId, out string authId))
+        {
+            if (_authToUserDataDictionary.TryGetValue(authId, out UserData data))
+            {
+                return data;
+            }
+        }
+        return null;
     }
 }

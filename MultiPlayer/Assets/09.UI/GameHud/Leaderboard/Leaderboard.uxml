@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="BoardItem" src="project://database/Assets/09.UI/GameHud/Leaderboard/BoardItem.uxml?fileID=9197481963319205126&amp;guid=f65af41a4a9b6c14d888cf32bf7a7ab3&amp;type=3#BoardItem" />
+    <Style src="project://database/Assets/09.UI/GameHud/Leaderboard/Leaderboard.uss?fileID=7433441132597879392&amp;guid=37cce5a131b47354f9ee553c4298f5ea&amp;type=3#Leaderboard" />
+    <ui:VisualElement name="leaderboard" style="padding-left: 35px; padding-right: 35px; padding-top: 35px; padding-bottom: 35px;">
+        <ui:VisualElement name="inner-holder">
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+            <ui:Instance template="BoardItem" name="BoardItem" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
