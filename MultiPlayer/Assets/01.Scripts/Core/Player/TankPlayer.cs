@@ -11,6 +11,7 @@ public class TankPlayer : NetworkBehaviour
     [Header("참조변수")]
     [SerializeField] private CinemachineVirtualCamera _followCam;
     [field: SerializeField] public Health HealthCompo { get; private set; }
+    [field: SerializeField] public CoinCollector Coin {  get; private set; }
 
     [Header("세팅값")]
     [SerializeField] private int _ownerCamPriority;

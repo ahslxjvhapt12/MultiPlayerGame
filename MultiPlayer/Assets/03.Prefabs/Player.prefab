@@ -468,6 +468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _followCam: {fileID: 1899017877233344481}
   <HealthCompo>k__BackingField: {fileID: 2780244224340233682}
+  <Coin>k__BackingField: {fileID: 3549893372817648751}
   _ownerCamPriority: 15
   playerName:
     m_InternalValue:

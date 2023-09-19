@@ -1,6 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Leaderboard" src="project://database/Assets/09.UI/GameHud/Leaderboard/Leaderboard.uxml?fileID=9197481963319205126&amp;guid=2b7b825ca3a6dd94da02d6fc12c4d5e7&amp;type=3#Leaderboard" />
     <Style src="project://database/Assets/09.UI/GameHud/GameHud.uss?fileID=7433441132597879392&amp;guid=c7fb44672013a684499954a3e58799a3&amp;type=3#GameHud" />
     <ui:VisualElement name="container">
-        <ui:VisualElement name="leaderboard-container" />
+        <ui:VisualElement name="leaderboard-container">
+            <ui:Instance template="Leaderboard" name="Leaderboard" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

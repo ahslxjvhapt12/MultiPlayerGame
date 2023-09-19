@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="board-item" class="board-item">
-        <ui:Label text="Label" display-tooltip-when-elided="true" name="board-label" />
+    <ui:VisualElement name="board-item" class="board-item" style="flex-direction: row; justify-content: center;">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="board-label" style="flex-grow: 1;" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="board-label-coin" style="-unity-text-align: upper-right; flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>
