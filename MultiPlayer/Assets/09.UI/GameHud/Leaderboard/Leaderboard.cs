@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -60,16 +61,19 @@ public class Leaderboard
 
     public void SortOrder()
     {
-        for (int i = 0; i < _itemList.Count; i++)
+        _itemList.Sort((a, b) => b.Coins.CompareTo(a.Coins));
+        for (int i = 0; i < _itemList.Count; ++i)
         {
-            for (int j = 0; j < _itemList.Count; j++)
+            var item = _itemList[i];
+            item.rank = i + 1; // 등수 기록하고
+            item.Root.BringToFront();
+            item.UpdateText();
+
+            item.Show(i < _displayCount);
+
+            if(item.ClientID == NetworkManager.Singleton.LocalClientId)
             {
-                if (_itemList[i].Coins > _itemList[j].Coins)
-                {
-                    BoardItem temp = _itemList[i];
-                    _itemList[i] = _itemList[j];
-                    _itemList[j] = temp;
-                }
+                item.Show(true);
             }
         }
     }

@@ -829,6 +829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 8572369868655911961, guid: 2881313503361e044838383713581eb5, type: 3}
+  _keptCoinRatio: 0.2
 --- !u!1 &869994077
 GameObject:
   m_ObjectHideFlags: 0

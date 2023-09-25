@@ -12,9 +12,14 @@ public class Health : NetworkBehaviour
     [field: SerializeField] public int MaxHealth { get; private set; } = 100;
 
     private bool _isDead;
-
+    public TankPlayer Tank { get;private set; }
     public Action<Health> OnDie;
     public UnityEvent<int, int, float> OnHealthChanged; // 이전값, 지금값, 비율
+
+    private void Awake()
+    {
+        Tank = GetComponent<TankPlayer>();
+    }
 
     public override void OnNetworkSpawn()
     {

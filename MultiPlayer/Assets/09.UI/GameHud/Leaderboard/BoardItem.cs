@@ -51,7 +51,7 @@ public class BoardItem
         UpdateText();
     }
 
-    private void UpdateText()
+    public void UpdateText()
     {
         if (ClientID == NetworkManager.Singleton.LocalClientId) // 내꺼 순위를 그리려고 한다
         {

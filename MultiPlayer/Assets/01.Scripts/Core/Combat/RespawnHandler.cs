@@ -7,6 +7,7 @@ using UnityEngine;
 public class RespawnHandler : NetworkBehaviour
 {
     [SerializeField] private TankPlayer _playerPrefab;
+    [SerializeField] private float _keptCoinRatio; // 죽어도 보유하고 있을 코인 비율
 
     //private Action<Health> DieAction = null;
 
@@ -39,11 +40,16 @@ public class RespawnHandler : NetworkBehaviour
 
     private void HandlePlayerDie(Health player)
     {
+        // 죽어도 남아있는 코인
+        int remainCoin = Mathf.FloorToInt(player.Tank.Coin.totalCoins.Value * _keptCoinRatio);
+
         Destroy(player.gameObject);
-        StartCoroutine(RespawnPlayer(player.OwnerClientId));
+        if (remainCoin <= 10)
+            remainCoin = 10;
+        StartCoroutine(RespawnPlayer(player.OwnerClientId, remainCoin));
     }
 
-    private IEnumerator RespawnPlayer(ulong ownerClientID)
+    private IEnumerator RespawnPlayer(ulong ownerClientID, int remainCoin)
     {
         yield return null; //또는 여기서 10초 카운트다운을 먹이고 실행할 수 도있다.
 
@@ -52,6 +58,7 @@ public class RespawnHandler : NetworkBehaviour
         //서버에서 만들어진 플레이어를 모든 클라이언트에게 만들라고 전달하면서
         //동시에 이 플레이어가 누구의 소유인지도 알려주는거야
         instance.NetworkObject.SpawnAsPlayerObject(ownerClientID);
+        instance.Coin.totalCoins.Value = remainCoin;
     }
 
     private void HandlePlayerDeSpawned(TankPlayer player)
