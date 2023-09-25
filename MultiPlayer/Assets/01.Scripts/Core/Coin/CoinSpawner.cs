@@ -56,7 +56,7 @@ public class CoinSpawner : NetworkBehaviour
         for (int i = 0; i < _maxCoins; i++)
         {
             var coin = SpawnCoin();
-            //coin.isActive.Value = false;
+            coin.isActive.Value = false;
             coin.SetVisible(false);
             _coinPool.Push(coin);
         }
