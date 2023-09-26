@@ -12,7 +12,7 @@ public class Health : NetworkBehaviour
     [field: SerializeField] public int MaxHealth { get; private set; } = 100;
 
     private bool _isDead;
-    public TankPlayer Tank { get;private set; }
+    public TankPlayer Tank { get; private set; }
     public Action<Health> OnDie;
     public UnityEvent<int, int, float> OnHealthChanged; // 이전값, 지금값, 비율
 
@@ -44,6 +44,20 @@ public class Health : NetworkBehaviour
     private void HandleChangeHealth(int prev, int newValue)
     {
         OnHealthChanged?.Invoke(prev, newValue, (float)newValue / MaxHealth);
+
+        int delta = newValue - prev;
+        int value = Mathf.Abs(delta); // 절대값으로 수치를 알아내고
+
+        if (value == MaxHealth) return; // 리스폰 된거라서 무시
+
+        if (delta < 0)
+        {
+            UIManager.Instance.PopupText(value.ToString(), transform.position, Color.red);
+        }
+        else
+        {
+            UIManager.Instance.PopupText(value.ToString(), transform.position, Color.green);
+        }
     }
 
     public void TakeDamage(int damage)

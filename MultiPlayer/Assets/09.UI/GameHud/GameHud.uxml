@@ -5,5 +5,9 @@
         <ui:VisualElement name="leaderboard-container">
             <ui:Instance template="Leaderboard" name="Leaderboard" />
         </ui:VisualElement>
+        <ui:VisualElement name="minimap-container">
+            <ui:VisualElement name="back-radar" />
+            <ui:VisualElement name="minimap" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

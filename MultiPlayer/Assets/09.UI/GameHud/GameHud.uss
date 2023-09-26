@@ -7,3 +7,25 @@
     top: 10px;
     right: 10px;
 }
+
+#minimap-container {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 300px;
+    height: 300px;
+    background-image: url('project://database/Assets/04.Sprites/Frame_Border.png?fileID=21300000&guid=cee07c87981168b46a6778604009d1d2&type=3#Frame_Border');
+}
+
+#back-radar {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('project://database/Assets/04.Sprites/Radar.png?fileID=21300000&guid=16b74084c63f08f48874c991a63bf571&type=3#Radar');
+}
+
+#minimap {
+    background-image: url('project://database/Assets/04.Sprites/RenderTexture/MiniMapTexture.renderTexture?fileID=8400000&guid=bdb03a83117a41449a508c7f02cea146&type=2#MiniMapTexture');
+    flex-grow: 1;
+}

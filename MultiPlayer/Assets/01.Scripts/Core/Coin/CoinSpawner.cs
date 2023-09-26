@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,12 +23,14 @@ public class CoinSpawner : NetworkBehaviour
     private bool _isSpawning = false;
     private float _spawningTime = 0;
     private int _spawnCountTime = 10; // 10초 카운팅하고 시작
+    private int _activePointIdx = 0;
 
     public List<SpawnPoint> spawnPointList; // 코인이 스폰될 지점의 리스트
     private float _coinRadius;
 
     private Stack<RespawningCoin> _coinPool = new Stack<RespawningCoin>(); // 코인 풀
     private List<RespawningCoin> _activeCoinList = new List<RespawningCoin>(); // 코인이 스폰되면 들어올 리스트
+
 
     private RespawningCoin SpawnCoin()
     {
@@ -49,6 +52,8 @@ public class CoinSpawner : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        spawnPointList.ForEach(p => p.ShowIcon(false));
+
         if (!IsServer) return;
 
         _coinRadius = _coinPrefab.GetComponent<CircleCollider2D>().radius; // 반지름 
@@ -120,10 +125,12 @@ public class CoinSpawner : NetworkBehaviour
         CloseDecalCircleClientRPC(); // 클라이언트에서 닫아 질꺼다
     }
 
+
     [ClientRpc]
     private void CloseDecalCircleClientRPC()
     {
         _decalCircle.CloseCircle();
+        spawnPointList[_activePointIdx].ShowIcon(false);
     }
 
     [ClientRpc]
@@ -133,8 +140,22 @@ public class CoinSpawner : NetworkBehaviour
         if (!_decalCircle.showDecal)
         {
             _decalCircle.OpenCircle(point.Position, point.Radius);
+            _activePointIdx = pointIdx;
+            point.ShowIcon(true);
+            point.BlinkIcon(true);
         }
         Debug.Log($"{point.pointName} 번 지점에서 {sec} 초 후 {coinCount} 개의 코인이 생성됩니다.");
+
+        if (sec <= 1)
+        {
+            StartCoroutine(DisableMessage(point, 1f));
+        }
+    }
+
+    IEnumerator DisableMessage(SpawnPoint point, float time)
+    {
+        yield return new WaitForSeconds(time);
+        point.BlinkIcon(false);
     }
 
     #endregion

@@ -54,4 +54,13 @@ public class CoinCollector : NetworkBehaviour
         bountyCoin.NetworkObject.Spawn();
         bountyCoin.SetCoinToVisible(coinScale);
     }
+
+    /// <summary>
+    /// 서버만 호출하는 돈 줄이는 코드
+    /// </summary>
+    /// <param name="value"></param>
+    public void SpendCoin(int value)
+    {
+        totalCoins.Value -= value;
+    }
 }

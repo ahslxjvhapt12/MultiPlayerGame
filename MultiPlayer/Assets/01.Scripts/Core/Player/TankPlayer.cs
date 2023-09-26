@@ -12,9 +12,11 @@ public class TankPlayer : NetworkBehaviour
     [SerializeField] private CinemachineVirtualCamera _followCam;
     [field: SerializeField] public Health HealthCompo { get; private set; }
     [field: SerializeField] public CoinCollector Coin {  get; private set; }
+    [SerializeField] private GameObject _miniMapIcon; 
 
     [Header("세팅값")]
     [SerializeField] private int _ownerCamPriority;
+    [SerializeField] private Color _ownerColor;
 
     // 32바이트 utf기준 한글(3바이트) 10글자 영어 31글자
     public NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>();
@@ -36,6 +38,7 @@ public class TankPlayer : NetworkBehaviour
 
         if (IsOwner)
         {
+            _miniMapIcon.GetComponent<SpriteRenderer>().color = _ownerColor;
             _followCam.Priority = _ownerCamPriority;
         }
     }
