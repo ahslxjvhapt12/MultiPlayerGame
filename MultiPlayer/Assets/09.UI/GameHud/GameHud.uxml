@@ -9,5 +9,8 @@
             <ui:VisualElement name="back-radar" />
             <ui:VisualElement name="minimap" />
         </ui:VisualElement>
+        <ui:VisualElement name="msg-container" style="transition-duration: 0.5s;">
+            <ui:Label text="코인이 생성될 예정입니다!" display-tooltip-when-elided="true" name="msg-label" focusable="false" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

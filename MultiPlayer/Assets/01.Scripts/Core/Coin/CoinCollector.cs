@@ -22,6 +22,7 @@ public class CoinCollector : NetworkBehaviour
         {
             int value = c.Collect();
             if (!IsServer) return;
+            UIManager.Instance.PopupText(value.ToString(), transform.position, new Color(255, 255, 0, 255));
             totalCoins.Value += value;
         }
     }

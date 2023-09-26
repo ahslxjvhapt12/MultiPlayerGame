@@ -18,6 +18,7 @@ public class GameHud : NetworkBehaviour
 
     private UIDocument _document;
     [SerializeField] Color _color;
+
     private void Awake()
     {
         _leaderBoardEntities = new NetworkList<LeaderboardEntityState>();

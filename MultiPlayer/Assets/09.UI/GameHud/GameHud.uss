@@ -29,3 +29,24 @@
     background-image: url('project://database/Assets/04.Sprites/RenderTexture/MiniMapTexture.renderTexture?fileID=8400000&guid=bdb03a83117a41449a508c7f02cea146&type=2#MiniMapTexture');
     flex-grow: 1;
 }
+
+#msg-container {
+    position: absolute;
+    left: 50%;
+    top: 150px;
+    translate: -50% 0;
+    transition-property: top;
+    transition-duration: 0.5s;
+}
+
+#msg-label {
+    font-size: 35px;
+    -unity-font-style: bold;
+    color: rgba(0, 0, 0, 255);
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-outline-width: 1px;
+}
+
+#msg-container.off {
+    top: -150px;
+}
