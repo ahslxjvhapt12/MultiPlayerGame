@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=f160eef52a7d3c14b89b4e58be41a57c&amp;type=3#Common" />
+    <ui:VisualElement name="lobby-item" style="flex-grow: 0; flex-direction: row; justify-content: space-between; align-items: center; padding-top: 15px; padding-bottom: 15px; padding-right: 25px; padding-left: 25px; background-color: rgba(149, 149, 149, 0.78); margin-bottom: 15px; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px;">
+        <ui:Label tabindex="-1" text="room name" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lobby-name" class="nps-font" style="font-size: 25px;" />
+        <ui:Button text="Join" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-join" class="nps-font" style="font-size: 15px; -unity-text-outline-width: 1px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;" />
+    </ui:VisualElement>
+</ui:UXML>
