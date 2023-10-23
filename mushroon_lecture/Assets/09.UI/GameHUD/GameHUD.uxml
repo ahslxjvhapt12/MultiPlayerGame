@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/GameHUD/GameHUD.uss?fileID=7433441132597879392&amp;guid=88cc433fda0c0c04ba6e56a3d800da35&amp;type=3#GameHUD" />
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=f160eef52a7d3c14b89b4e58be41a57c&amp;type=3#Common" />
+    <ui:VisualElement name="container" class="container">
+        <ui:VisualElement name="waiting-panel" class="waiting-panel">
+            <ui:VisualElement name="waiting-box" class="waiting-box">
+                <ui:Label tabindex="-1" text="다른 플레이어를 기다리는 중..." parse-escape-sequences="true" display-tooltip-when-elided="true" name="msg-label" class="nps-font" />
+                <ui:VisualElement name="player-row" class="player-row">
+                    <ui:VisualElement name="player1" class="player" style="align-items: center;">
+                        <ui:VisualElement name="sprite" style="flex-grow: 1;">
+                            <ui:VisualElement name="checker" class="check" style="flex-grow: 1; position: absolute; bottom: 20px;" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="이름" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name-label" enable-rich-text="true" class="nps-font" style="font-size: 25px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="player2" class="player" style="align-items: center;">
+                        <ui:VisualElement name="sprite" style="flex-grow: 1;">
+                            <ui:VisualElement name="checker" class="check" style="flex-grow: 1; position: absolute; bottom: 20px;" />
+                        </ui:VisualElement>
+                        <ui:Label tabindex="-1" text="이름" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name-label" enable-rich-text="true" class="nps-font" style="font-size: 25px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="button-row" class="button-row">
+                    <ui:Button text="게임 시작" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start" class="nps-font btn" />
+                    <ui:Button text="준비 완료" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ready" class="nps-font btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

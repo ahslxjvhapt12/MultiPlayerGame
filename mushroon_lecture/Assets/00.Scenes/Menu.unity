@@ -186,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _createPanelAsset: {fileID: 9197481963319205126, guid: 7c4b842c83ad82e4db0a22ef8c8c2a10, type: 3}
   _lobbyPaenlAsset: {fileID: 9197481963319205126, guid: 4f095cd82dc284248a94fbe5a65f77b3, type: 3}
+  _lobbyTemplateAsset: {fileID: 9197481963319205126, guid: 9381750c6bf9d6f4d82b6472d45d86d7, type: 3}
 --- !u!1 &1035797036
 GameObject:
   m_ObjectHideFlags: 0

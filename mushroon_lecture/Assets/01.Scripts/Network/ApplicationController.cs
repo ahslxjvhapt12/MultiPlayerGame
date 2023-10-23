@@ -7,7 +7,9 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.SceneManagement;
 
 //이녀석은 호스트 싱글톤과 클라이언트 싱글톤을 관리하면서
@@ -69,15 +71,23 @@ public class ApplicationController : MonoBehaviour
         AuthenticationWrapper.OnMessageEvent -= HandleAuthMessage;
     }
 
-    public async Task<bool> StartHost(string username, string lobbyName)
+    public async Task<bool> StartHostAsync(string username, string lobbyName)
     {
-        var userData = new UserData
+        return await HostSingleton.Instance.GameManager.StartHostAsync(lobbyName, GetUserData(username));
+    }
+
+    public async Task StartClientAsync(string username, string joinCode)
+    {
+        await ClientSignleton.Instance.GameManager.StartClientAsync(joinCode, GetUserData(username));
+    }
+
+    private UserData GetUserData(string username)
+    {
+        return new UserData
         {
             name = username,
-            userAuthID = AuthenticationService.Instance.PlayerId
+            userAuthID = AuthenticationService.Instance.PlayerId,
         };
-
-        return await HostSingleton.Instance.GameManager.StartHostAsync(lobbyName, userData);
     }
 
     public async Task<List<Lobby>> GetLobbyList()

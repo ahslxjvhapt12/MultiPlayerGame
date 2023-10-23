@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
@@ -40,8 +43,16 @@ public class ClientGameManager
         }
 
         // 트랜스포트를 받아서
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         // 릴레이서버 데이터를 만들어서 설정해주고
+        var relayServarData = new RelayServerData(_allocation, "dtls");
+        transport.SetRelayServerData(relayServarData);
         // user데이터를 json 으로 만들어서 connectionData에 넣은 후에
+        string json = JsonUtility.ToJson(userData);
+
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(json);
         // NetworkManager에 StartClient 를 해주면 된다.
+
+        NetworkManager.Singleton.StartClient();
     }
 }

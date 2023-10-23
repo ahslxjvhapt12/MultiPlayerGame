@@ -1,17 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+using System;
+using Unity.Services.Lobbies.Models;
 using UnityEngine.UIElements;
 
 public class LobbyPanel
 {
     private VisualElement _root;
     private Label _statusLabel;
+    public Label StatusLabel => _statusLabel;
 
     public ScrollView _lobbyScrollView;
     private bool _isLobbyRefresh = false;
     private VisualTreeAsset _lobbyAsset;
+
+    private bool _isJoining = false;
+    public event Action<Lobby> JoinLobbyBtnEvent;
+
 
     public LobbyPanel(VisualElement root, VisualTreeAsset lobbyAsset)
     {
@@ -25,10 +28,16 @@ public class LobbyPanel
 
     private async void HandleRefreshBtnClick(ClickEvent evt)
     {
+        Refresh();
+    }
+
+    public async void Refresh()
+    {
         if (_isLobbyRefresh) return;
 
         _isLobbyRefresh = true;
         var list = await ApplicationController.Instance.GetLobbyList();
+        _lobbyScrollView.Clear();
 
         foreach (var lobby in list)
         {
@@ -36,12 +45,15 @@ public class LobbyPanel
             _lobbyScrollView.Add(lobbyTemplate);
 
             lobbyTemplate.Q<Label>("lobby-name").text = lobby.Name;
+
             lobbyTemplate.Q<Button>("btn-join").RegisterCallback<ClickEvent>(evt =>
             {
-                // 여기서 조인하고 머시기 넣기
+                JoinLobbyBtnEvent?.Invoke(lobby);
+                //JoinToLobby(lobby);
             });
         }
 
         _isLobbyRefresh = false;
     }
+
 }
