@@ -7,12 +7,12 @@ public class PlayerUI
     private Label _nameLabel;
     private VisualElement _root;
 
-    public ulong clientID;
+    public ulong clientID = 999;
 
     public PlayerUI(VisualElement root)
     {
         _root = root;
-        _sprite = root.Q<VisualElement>("Sprite");
+        _sprite = root.Q<VisualElement>("sprite");
         _nameLabel = root.Q<Label>("name-label");
     }
 
@@ -20,6 +20,7 @@ public class PlayerUI
     {
         clientID = data.clientID;
         _nameLabel.text = data.playerName.Value;
+        SetCheck(data.ready);
     }
 
     public void SetCheck(bool check)
@@ -41,6 +42,12 @@ public class PlayerUI
 
     public void RemovePlayerUI()
     {
+        clientID = 999;
         _root.style.visibility = Visibility.Hidden;
+    }
+
+    public void VisiblePlayerUI()
+    {
+        _root.style.visibility = Visibility.Visible;
     }
 }

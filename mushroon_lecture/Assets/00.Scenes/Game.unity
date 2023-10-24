@@ -336,6 +336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 267698654}
   - component: {fileID: 267698655}
+  - component: {fileID: 267698656}
   m_Layer: 0
   m_Name: UIdocument
   m_TagString: Untagged
@@ -374,6 +375,18 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 4b2d6f9b3a9a1114e9302ed515cff49e, type: 3}
   m_SortingOrder: 0
+--- !u!114 &267698656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267698653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aaaf98c8ccbcc44f82249df634fe9ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &371518643
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,10 +971,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876945dc5cac7784781f1b09c9643148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnPosition: {fileID: 0}
+  _spawnPosition: {fileID: 920207315}
   slimeColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0.102157354, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0.7981615, a: 1}
   myGameRole: 0
 --- !u!1 &1806906246
 GameObject:

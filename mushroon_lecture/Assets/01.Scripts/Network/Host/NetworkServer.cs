@@ -11,8 +11,8 @@ public class NetworkServer : IDisposable
     public Action<string, ulong> OnClientJoin; //클라이언트 접속 및 종료시 발행이벤트
     public Action<string, ulong> OnClientLeft;
 
-    private Dictionary<ulong, string> _clientToAuthDictionary = new ();
-    private Dictionary<string, UserData> _authIdToUserDataDictionary = new ();
+    private Dictionary<ulong, string> _clientToAuthDictionary = new();
+    private Dictionary<string, UserData> _authIdToUserDataDictionary = new();
 
     private NetworkObject _playerPrefab;
 
@@ -26,7 +26,7 @@ public class NetworkServer : IDisposable
     }
 
     //승인 체크 과정인데
-    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest req, 
+    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest req,
                                 NetworkManager.ConnectionApprovalResponse res)
     {
         string json = Encoding.UTF8.GetString(req.Payload);
@@ -50,7 +50,7 @@ public class NetworkServer : IDisposable
     //클라이언트가 접속 종료했을 때 해줄 일을 여기다가 쓴다.
     private void OnClientDisconnect(ulong clientID)
     {
-        if(_clientToAuthDictionary.TryGetValue(clientID, out var authID))
+        if (_clientToAuthDictionary.TryGetValue(clientID, out var authID))
         {
             _clientToAuthDictionary.Remove(clientID);
             _authIdToUserDataDictionary.Remove(authID);
@@ -60,9 +60,9 @@ public class NetworkServer : IDisposable
 
     public UserData GetUserDataByClientID(ulong clientID)
     {
-        if(_clientToAuthDictionary.TryGetValue(clientID, out string authID))
+        if (_clientToAuthDictionary.TryGetValue(clientID, out string authID))
         {
-            if(_authIdToUserDataDictionary.TryGetValue(authID, out UserData data))
+            if (_authIdToUserDataDictionary.TryGetValue(authID, out UserData data))
             {
                 return data;
             }
@@ -72,7 +72,7 @@ public class NetworkServer : IDisposable
 
     public UserData GetUserDataByAuthID(string authID)
     {
-        if(_authIdToUserDataDictionary.TryGetValue(authID, out UserData data))
+        if (_authIdToUserDataDictionary.TryGetValue(authID, out UserData data))
         {
             return data;
         }
@@ -92,5 +92,14 @@ public class NetworkServer : IDisposable
         {
             _networkManager.Shutdown(); //종료
         }
+    }
+
+    public void SpawnPlayer(ulong clientID, Vector3 position, ushort colorIdx)
+    {
+        var player = GameObject.Instantiate(_playerPrefab, position, Quaternion.identity);
+        player.SpawnAsPlayerObject(clientID);
+
+        PlayerColorizer colorizer = player.GetComponent<PlayerColorizer>();
+        colorizer.SetColor(colorIdx);
     }
 }

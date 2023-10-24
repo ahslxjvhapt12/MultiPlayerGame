@@ -1,5 +1,8 @@
 using System;
+using System.Data;
+using System.Security.Cryptography;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public enum GameState
@@ -30,6 +33,8 @@ public class GameManager : NetworkBehaviour
 
     private ushort _colorIdx = 0;
 
+    // 호스트만 사용하는 변수
+    private int _readyUserCount = 0;
 
     private void Awake()
     {
@@ -91,6 +96,7 @@ public class GameManager : NetworkBehaviour
             try
             {
                 players.Remove(data);
+                --_colorIdx;
             }
             catch
             {
@@ -98,5 +104,67 @@ public class GameManager : NetworkBehaviour
             }
             break;
         }
+    }
+
+    public void GameReady()
+    {
+        // 서버 RPC는 오너만 보낼 수 있다
+        SendReadyStateServerRpc(NetworkManager.Singleton.LocalClientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendReadyStateServerRpc(ulong clientID)
+    {
+        for (int i = 0; i < players.Count; ++i)
+        {
+            if (players[i].clientID != clientID) continue;
+
+            var old = players[i];
+            players[i] = new GameData
+            {
+                clientID = clientID,
+                playerName = old.playerName,
+                ready = !old.ready,
+                colorIdx = old.colorIdx,
+            };
+
+            _readyUserCount += players[i].ready ? 1 : -1;
+            break;
+        }
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        players?.Dispose();
+    }
+
+    public void GameStart()
+    {
+        if (!IsHost) return;
+        if (_readyUserCount >= 1)
+        {
+            SpawnPlayers();
+            StartGameClientRpc();
+        }
+        else
+        {
+            Debug.Log("아직 준비중");
+        }
+    }
+
+    private void SpawnPlayers()
+    {
+        foreach (var player in players)
+        {
+            HostSingleton.Instance.GameManager.NetServer.SpawnPlayer(player.clientID, _spawnPosition.position, player.colorIdx);
+        }
+    }
+
+    [ClientRpc]
+    private void StartGameClientRpc()
+    {
+        _gameState = GameState.Game;
+        GameStateChanged?.Invoke(_gameState);
     }
 }
