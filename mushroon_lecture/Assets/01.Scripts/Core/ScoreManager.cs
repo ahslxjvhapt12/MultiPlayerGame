@@ -48,10 +48,12 @@ public class ScoreManager : NetworkBehaviour
         if (hostScore.Value >= 3)
         {
             GameManager.Instance.SendResultToClient(GameRole.Host);
+            InitializeScore();
         }
         else if (clientScore.Value >= 3)
         {
-            GameManager.Instance.SendResultToClient(GameRole.Client) ;
+            GameManager.Instance.SendResultToClient(GameRole.Client);
+            InitializeScore();
         }
         else
         {

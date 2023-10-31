@@ -20,7 +20,7 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance;
     public event Action<GameState> GameStateChanged; // 게임의 상태가 변했을 때 발행되는 것.
-    private GameState _gameState; // 현재 게임 상태
+    public GameState GameState; // 현재 게임 상태
 
     [SerializeField] private Transform _spawnPosition;
     public Color[] slimeColors; // 슬라임의 컬러
@@ -47,7 +47,7 @@ public class GameManager : NetworkBehaviour
     // 이게 스폰보다 먼저 실행 될거다
     private void Start()
     {
-        _gameState = GameState.Ready;
+        GameState = GameState.Ready;
     }
 
     public override void OnNetworkSpawn()
@@ -166,13 +166,14 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     private void StartGameClientRpc()
     {
-        _gameState = GameState.Game;
-        GameStateChanged?.Invoke(_gameState);
+        GameState = GameState.Game;
+        GameStateChanged?.Invoke(GameState);
     }
 
     public void SendResultToClient(GameRole winner)
     {
         HostSingleton.Instance.GameManager.NetServer.DestroyAllPlayer();
+        EggManager.DestroyEgg();
         SendResultToClientRpc(winner);
     }
 
@@ -181,17 +182,17 @@ public class GameManager : NetworkBehaviour
     {
         if (winner == myGameRole)
         {
-            _gameState = GameState.Win;
+            GameState = GameState.Win;
             SignalHub.OnEndGame?.Invoke(true);
         }
         else
         {
-            _gameState = GameState.Lose;
+            GameState = GameState.Lose;
             SignalHub.OnEndGame?.Invoke(false);
         }
 
 
-        GameStateChanged?.Invoke(_gameState);
+        GameStateChanged?.Invoke(GameState);
     }
 
 }

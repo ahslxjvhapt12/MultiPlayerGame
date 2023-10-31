@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,8 +51,16 @@ public class GameHUD : MonoBehaviour
         _startGameBtn.RegisterCallback<ClickEvent>(HandleGameStartClick);
         _readyGameBtn.RegisterCallback<ClickEvent>(HandleReadyClick);
 
+        root.Q<Button>("btn-restart").RegisterCallback<ClickEvent>(HandleRestartClick);
+
         SignalHub.OnScoreChanged += HandleScoreChanged;
         SignalHub.OnEndGame += HandleEndGame;
+    }
+
+    private void HandleRestartClick(ClickEvent evt)
+    {
+        _resultBox.AddToClassList("off");
+        _container.RemoveFromClassList("off");
     }
 
     private void HandleEndGame(bool isWin)
@@ -142,6 +151,7 @@ public class GameHUD : MonoBehaviour
         if (state == GameState.Game)
         {
             _container.AddToClassList("off");
+            GameManager.Instance.GameReady();
         }
     }
 

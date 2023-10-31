@@ -51,4 +51,9 @@ public class EggManager : NetworkBehaviour
     {
         _eggInstance.ResetToStartPosition(_eggStartPosition.position);
     }
+
+    public void DestroyEgg()
+    {
+        Destroy(_eggInstance.gameObject);
+    }
 }
