@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -14,6 +15,12 @@ public class GameHUD : MonoBehaviour
     private List<PlayerUI> _players = new();
 
     private VisualElement _container;
+    private VisualElement _score;
+
+    public Label _hostLabel;
+    public Label _clientLabel;
+
+    private VisualElement _resultBox;
 
     private void Awake()
     {
@@ -27,6 +34,12 @@ public class GameHUD : MonoBehaviour
         _readyGameBtn = root.Q<Button>("btn-ready");
         _container = root.Q<VisualElement>("container");
 
+        _hostLabel = root.Q<Label>("host-score");
+        _clientLabel = root.Q<Label>("client-score");
+
+        _resultBox = root.Q<VisualElement>("result-box");
+        _resultBox.AddToClassList("off");
+
         root.Query<VisualElement>(className: "player").ToList().ForEach(x =>
         {
             var player = new PlayerUI(x);
@@ -36,6 +49,22 @@ public class GameHUD : MonoBehaviour
 
         _startGameBtn.RegisterCallback<ClickEvent>(HandleGameStartClick);
         _readyGameBtn.RegisterCallback<ClickEvent>(HandleReadyClick);
+
+        SignalHub.OnScoreChanged += HandleScoreChanged;
+        SignalHub.OnEndGame += HandleEndGame;
+    }
+
+    private void HandleEndGame(bool isWin)
+    {
+        string msg = isWin ? "YOU WIN!" : "YOU LOSE";
+        _resultBox.Q<Label>("result-label").text = msg;
+        _resultBox.RemoveFromClassList("off");
+    }
+
+    private void HandleScoreChanged(int hostScore, int clientScore)
+    {
+        _hostLabel.text = hostScore.ToString();
+        _clientLabel.text = clientScore.ToString();
     }
 
     // 여기까지 왔으면 게임메니저가 다 완성이 된 상태다. 근데 네트워크 스폰까지 안된.
@@ -108,9 +137,9 @@ public class GameHUD : MonoBehaviour
         }
     }
 
-    private void HandleGameStateChanged(GameState obj)
+    private void HandleGameStateChanged(GameState state)
     {
-        if (obj == GameState.Game)
+        if (state == GameState.Game)
         {
             _container.AddToClassList("off");
         }

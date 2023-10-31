@@ -1,6 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/09.UI/GameHUD/GameHUD.uss?fileID=7433441132597879392&amp;guid=88cc433fda0c0c04ba6e56a3d800da35&amp;type=3#GameHUD" />
     <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=f160eef52a7d3c14b89b4e58be41a57c&amp;type=3#Common" />
+    <ui:VisualElement name="score-box" style="flex-grow: 1; position: absolute; flex-direction: row; top: 20px; left: 50%; translate: -50% 0; align-items: center;">
+        <ui:Label tabindex="-1" text="00" parse-escape-sequences="true" display-tooltip-when-elided="true" name="host-score" class="nps-font" style="font-size: 60px; -unity-text-align: upper-center; color: rgb(255, 0, 0);" />
+        <ui:Label tabindex="-1" text="-" parse-escape-sequences="true" display-tooltip-when-elided="true" name="hyphen" class="nps-font" style="margin-right: 25px; margin-left: 25px; -unity-text-align: upper-center; font-size: 60px;" />
+        <ui:Label tabindex="-1" text="00" parse-escape-sequences="true" display-tooltip-when-elided="true" name="client-score" class="nps-font" style="font-size: 60px; -unity-text-align: upper-center; color: rgb(0, 34, 255);" />
+    </ui:VisualElement>
     <ui:VisualElement name="container" class="container">
         <ui:VisualElement name="waiting-panel" class="waiting-panel">
             <ui:VisualElement name="waiting-box" class="waiting-box">
@@ -24,6 +29,12 @@
                     <ui:Button text="준비 완료" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ready" class="nps-font btn" />
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="result-box" class="result-box" style="flex-grow: 1; position: absolute; background-color: rgb(0, 0, 0); height: 100%; width: 100%; align-items: center; justify-content: center;">
+        <ui:VisualElement name="inner-box" style="align-items: center; justify-content: center;">
+            <ui:Label tabindex="-1" text="You Win" parse-escape-sequences="true" display-tooltip-when-elided="true" name="result-label" class="nps-font" style="font-size: 90px; margin-bottom: 40px;" />
+            <ui:Button text="재시작" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-restart" class="nps-font" style="width: 100%; height: 100px; color: rgb(255, 255, 255);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

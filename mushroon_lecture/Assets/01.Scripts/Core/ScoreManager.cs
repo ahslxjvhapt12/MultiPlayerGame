@@ -2,18 +2,28 @@ using Unity.Netcode;
 
 public class ScoreManager : NetworkBehaviour
 {
-
     public NetworkVariable<int> hostScore = new NetworkVariable<int>();
     public NetworkVariable<int> clientScore = new NetworkVariable<int>();
 
+    private void HandleScoreChanged(int oldScore, int newScore)
+    {
+        SignalHub.OnScoreChanged(hostScore.Value, clientScore.Value);
+    }
+
     public override void OnNetworkSpawn()
     {
+        hostScore.OnValueChanged += HandleScoreChanged;
+        clientScore.OnValueChanged += HandleScoreChanged;
+
         if (!IsServer) return;
         Egg.OnFallInWater += HandleFallInWater;
     }
 
     public override void OnNetworkDespawn()
     {
+        hostScore.OnValueChanged -= HandleScoreChanged;
+        clientScore.OnValueChanged -= HandleScoreChanged;
+
         if (!IsServer) return;
         Egg.OnFallInWater -= HandleFallInWater;
     }
@@ -29,6 +39,7 @@ public class ScoreManager : NetworkBehaviour
                 hostScore.Value += 1;
                 break;
         }
+
         CheckForEndGame();
     }
 
@@ -36,10 +47,16 @@ public class ScoreManager : NetworkBehaviour
     {
         if (hostScore.Value >= 3)
         {
-
+            GameManager.Instance.SendResultToClient(GameRole.Host);
         }
-
-        GameManager.Instance.EggManager.ResetEgg();
+        else if (clientScore.Value >= 3)
+        {
+            GameManager.Instance.SendResultToClient(GameRole.Client) ;
+        }
+        else
+        {
+            GameManager.Instance.EggManager.ResetEgg();
+        }
     }
 
     private void Start()
@@ -53,5 +70,4 @@ public class ScoreManager : NetworkBehaviour
         clientScore.Value = 0;
         // 나중에 UI 갱신까지 해줄거다
     }
-
 }

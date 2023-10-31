@@ -169,4 +169,29 @@ public class GameManager : NetworkBehaviour
         _gameState = GameState.Game;
         GameStateChanged?.Invoke(_gameState);
     }
+
+    public void SendResultToClient(GameRole winner)
+    {
+        HostSingleton.Instance.GameManager.NetServer.DestroyAllPlayer();
+        SendResultToClientRpc(winner);
+    }
+
+    [ClientRpc]
+    public void SendResultToClientRpc(GameRole winner)
+    {
+        if (winner == myGameRole)
+        {
+            _gameState = GameState.Win;
+            SignalHub.OnEndGame?.Invoke(true);
+        }
+        else
+        {
+            _gameState = GameState.Lose;
+            SignalHub.OnEndGame?.Invoke(false);
+        }
+
+
+        GameStateChanged?.Invoke(_gameState);
+    }
+
 }

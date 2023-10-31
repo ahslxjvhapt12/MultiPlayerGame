@@ -94,3 +94,11 @@
     opacity: 0;
     visibility: hidden;
 }
+
+.result-box {
+}
+
+.result-box.off {
+    opacity: 0;
+    visibility: hidden;
+}

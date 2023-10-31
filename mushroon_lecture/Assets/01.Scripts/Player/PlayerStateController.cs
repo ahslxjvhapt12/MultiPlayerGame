@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerStateController : NetworkBehaviour
 {
@@ -53,6 +54,12 @@ public class PlayerStateController : NetworkBehaviour
         var color = _spriteRenderer.color;
         color.a = value ? 1f : 0.3f;
         _spriteRenderer.color = color;
+    }
+
+    [ClientRpc]
+    public void InitStateClientRpc(bool value)
+    {
+        EnablePlayer(value);
     }
 
 }

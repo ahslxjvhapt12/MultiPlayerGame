@@ -16,6 +16,8 @@ public class NetworkServer : IDisposable
 
     private NetworkObject _playerPrefab;
 
+    private List<NetworkObject> _playerList = new List<NetworkObject>();
+
     public NetworkServer(NetworkManager networkManager, NetworkObject playerPrefab)
     {
         _networkManager = networkManager;
@@ -98,8 +100,22 @@ public class NetworkServer : IDisposable
     {
         var player = GameObject.Instantiate(_playerPrefab, position, Quaternion.identity);
         player.SpawnAsPlayerObject(clientID);
+        _playerList.Add(player);
+
 
         PlayerColorizer colorizer = player.GetComponent<PlayerColorizer>();
         colorizer.SetColor(colorIdx);
+
+        PlayerStateController controller = player.GetComponent<PlayerStateController>();
+        controller.InitStateClientRpc(clientID == NetworkManager.Singleton.LocalClientId);
+    }
+
+    public void DestroyAllPlayer()
+    {
+        foreach (var p in _playerList)
+        {
+            GameObject.Destroy(p.gameObject);
+        }
+        _playerList.Clear();
     }
 }
