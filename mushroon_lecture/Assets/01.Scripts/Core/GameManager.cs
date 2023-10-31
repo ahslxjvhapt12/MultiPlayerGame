@@ -1,8 +1,5 @@
 using System;
-using System.Data;
-using System.Security.Cryptography;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
 public enum GameState
@@ -36,10 +33,15 @@ public class GameManager : NetworkBehaviour
     // 호스트만 사용하는 변수
     private int _readyUserCount = 0;
 
+    public EggManager EggManager { get; private set; }
+    public TurnManager TurnManager { get; private set; }
+
     private void Awake()
     {
         Instance = this;
         players = new NetworkList<GameData>();
+        EggManager = GetComponent<EggManager>();
+        TurnManager = GetComponent<TurnManager>();
     }
 
     // 이게 스폰보다 먼저 실행 될거다
