@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,17 +6,24 @@ public class PlayerMovement : NetworkBehaviour
     [Header("참조데이터")]
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _bodyTrm;
+    [SerializeField] private ParticleSystem _dustCloudEffect;
     private Rigidbody2D _rigidbody;
 
     [Header("세팅값들")]
     [SerializeField] private float _movementSpeed = 4f;
     [SerializeField] private float _turningRate = 30f;
+    [SerializeField] private float _dustParticleEmissionValue = 10;
+
+    private ParticleSystem.EmissionModule _emissionModule;
+    private const float particleStopThreshold = 0.005f;
 
     private Vector2 _prevMovementInput;
+    private Vector3 _prevPosition;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _emissionModule = _dustCloudEffect.emission;
     }
 
     public override void OnNetworkSpawn()
@@ -57,6 +61,16 @@ public class PlayerMovement : NetworkBehaviour
         //위치를 이동시킬꺼야
         //오너인지 검사해서
         if (!IsOwner) return;
+
+        if ((transform.position - _prevPosition).sqrMagnitude > particleStopThreshold)
+        {
+            _emissionModule.rateOverTime = _dustParticleEmissionValue;
+        }
+        else
+        {
+            _emissionModule.rateOverTime = 0;
+        }
+        _prevPosition = transform.position;
 
         // 리지드바디의 속도에다가 바디의 up방향으로 y값을 적용해서 movementSpeed만큼 이동시켜주면 된다.
         _rigidbody.velocity = _bodyTrm.up * _prevMovementInput.y * _movementSpeed;

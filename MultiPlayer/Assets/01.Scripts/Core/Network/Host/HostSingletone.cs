@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class HostSingletone : MonoBehaviour
@@ -30,9 +31,9 @@ public class HostSingletone : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void CreateHost()
+    public void CreateHostNetworkObject(NetworkObject playerPrefab)
     {
-        GameManager = new HostGameManager();
+        GameManager = new HostGameManager(playerPrefab);
     }
 
     private void OnDestroy()

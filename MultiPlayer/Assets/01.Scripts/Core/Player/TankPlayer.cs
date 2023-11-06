@@ -9,10 +9,15 @@ using UnityEngine;
 public class TankPlayer : NetworkBehaviour
 {
     [Header("참조변수")]
+    [SerializeField] private GameObject _miniMapIcon;
     [SerializeField] private CinemachineVirtualCamera _followCam;
+    [SerializeField] private PlayerMovement _movement;
+    [SerializeField] private ProjectileLauncher _launcher;
+    [SerializeField] private SpriteRenderer _bodySprite;
+    [SerializeField] private SpriteRenderer _turretSprite;
+
     [field: SerializeField] public Health HealthCompo { get; private set; }
     [field: SerializeField] public CoinCollector Coin {  get; private set; }
-    [SerializeField] private GameObject _miniMapIcon; 
 
     [Header("세팅값")]
     [SerializeField] private int _ownerCamPriority;
@@ -49,5 +54,10 @@ public class TankPlayer : NetworkBehaviour
         {
             OnPlayerDespawned?.Invoke(this);
         }
+    }
+
+    public void SetTankNetworkVariable(object userData)
+    {
+        
     }
 }

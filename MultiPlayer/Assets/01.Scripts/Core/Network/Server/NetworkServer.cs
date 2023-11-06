@@ -7,16 +7,20 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
+    public Action<string> OnClientLeft;
 
     private Dictionary<ulong, string> _clientToAuthDictionary = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authToUserDataDictionary = new Dictionary<string, UserData>();
 
-    public NetworkServer(NetworkManager networkManager)
+    private NetworkObject _playerPrefabs;
+
+    public NetworkServer(NetworkManager networkManager, NetworkObject playerPrefabs)
     {
         _networkManager = networkManager;
 
         _networkManager.ConnectionApprovalCallback += ApprovalCheck;
         _networkManager.OnServerStarted += OnNetworkReady;
+        _playerPrefabs = playerPrefabs;
     }
 
     // 클라이언트들이 서버에 접속할 때 실행을 시켜줘서 요청에 따라 승인응답할 수도있고 안할수도
@@ -30,10 +34,16 @@ public class NetworkServer : IDisposable
         _authToUserDataDictionary[data.userAuthId] = data;
 
         res.Approved = true;
-        Vector3 temp = TankSpawnPoint.GetRandomSpawnPos(); // 켜진 위치중 랜덤한 위치
-        res.Position = temp;
-        res.Rotation = Quaternion.identity;
-        res.CreatePlayerObject = true;
+    }
+
+    public void SpawnPlayer(ulong clientID, UserListEntityState userState)
+    {
+        NetworkObject player = GameObject.Instantiate(_playerPrefabs, TankSpawnPoint.GetRandomSpawnPos(), Quaternion.identity);
+
+        player.SpawnAsPlayerObject(clientID);
+
+        TankPlayer tankComponent = player.GetComponent<TankPlayer>();
+        tankComponent.SetTankNetworkVariable(userState);
     }
 
     private void OnNetworkReady()
@@ -47,6 +57,8 @@ public class NetworkServer : IDisposable
         {
             _clientToAuthDictionary.Remove(clientId);
             _authToUserDataDictionary.Remove(authID);
+
+            OnClientLeft?.Invoke(authID); // 클라이언트 접속 종료시에 알려준다.
         }
     }
 
