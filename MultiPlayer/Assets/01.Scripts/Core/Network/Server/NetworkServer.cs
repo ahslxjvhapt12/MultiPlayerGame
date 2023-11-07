@@ -8,6 +8,7 @@ public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
     public Action<string> OnClientLeft;
+    public Action<UserData, ulong> OnClientJoin;
 
     private Dictionary<ulong, string> _clientToAuthDictionary = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authToUserDataDictionary = new Dictionary<string, UserData>();
@@ -32,6 +33,8 @@ public class NetworkServer : IDisposable
         //Debug.Log(data.username);
         _clientToAuthDictionary[req.ClientNetworkId] = data.userAuthId;
         _authToUserDataDictionary[data.userAuthId] = data;
+
+        OnClientJoin?.Invoke(data, req.ClientNetworkId);
 
         res.Approved = true;
     }

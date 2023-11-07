@@ -1,0 +1,154 @@
+#container {
+    flex-grow: 1;
+    background-color: rgb(0, 0, 0);
+    align-items: center;
+    justify-content: center;
+}
+
+#panel-box {
+    width: 1024px;
+    height: 768px;
+    background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=21300000&guid=e3681d0c635b0ab41a42bddd6ff9f1d1&type=3#Frame');
+    flex-direction: column;
+}
+
+#select-panel-box {
+    flex-basis: 300px;
+    padding-top: 25px;
+    padding-right: 25px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    flex-direction: row;
+}
+
+#select-panel {
+    flex-basis: 300px;
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.tank-image {
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 170px;
+}
+
+.tank-image .body {
+    flex-grow: 0;
+    background-image: url('project://database/Assets/04.Sprites/GroundShaker/Red/Bodies/body_tracks_red.png?fileID=21300000&guid=b1b1b6fed0487a8448a7208173dbada0&type=3#body_tracks_red');
+    width: 128px;
+    height: 128px;
+    position: absolute;
+}
+
+.tank-image .turret {
+    flex-grow: 0;
+    background-image: url('project://database/Assets/04.Sprites/GroundShaker/Red/Weapons/turret_01_mk1.gif?fileID=21300000&guid=428e148c02619744989de8eb1b6f2c34&type=3#turret_01_mk1');
+    width: 128px;
+    height: 128px;
+    position: absolute;
+    top: 25px;
+}
+
+.tank-panel {
+    background-image: url('project://database/Assets/04.Sprites/Frame_Border.png?fileID=21300000&guid=cee07c87981168b46a6778604009d1d2&type=3#Frame_Border');
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+}
+
+.tank-panel > .tank-name {
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    font-size: 25px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 15px;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.tank-info {
+    flex-basis: 400px;
+    padding-top: 15px;
+}
+
+.tank-info > .title {
+    font-size: 35px;
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+}
+
+.tank-info > .desc {
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    -unity-paragraph-spacing: 40px;
+}
+
+.ready-list {
+    flex-grow: 1;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 20px;
+    padding-left: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-basis: 250px;
+}
+
+.user {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.user > #ready-icon {
+    width: 32px;
+    height: 32px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    margin-right: 10px;
+}
+
+.user > #user-name {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 20px;
+    flex-basis: 150px;
+}
+
+.user > #tank-icon {
+    width: 48px;
+    height: 48px;
+    background-image: url('project://database/Assets/04.Sprites/GroundShaker/Red/Bodies/body_tracks_red.png?fileID=21300000&guid=b1b1b6fed0487a8448a7208173dbada0&type=3#body_tracks_red');
+}
+
+.user.on > #ready-icon {
+    background-color: rgb(75, 149, 75);
+}
+
+.button-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 30px;
+    padding-left: 30px;
+}

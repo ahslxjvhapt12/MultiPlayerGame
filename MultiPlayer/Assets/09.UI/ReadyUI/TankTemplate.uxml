@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=cf43c805a8af7fd4e93b2959e1b0faab&amp;type=3#Common" />
+    <TankVisualElement name="tank-panel" tank-name="Dummy" class="tank-panel">
+        <ui:VisualElement name="image" picking-mode="Ignore" class="tank-image" style="flex-grow: 1;">
+            <ui:VisualElement name="body" picking-mode="Ignore" class="body" style="flex-grow: 1;" />
+            <ui:VisualElement name="turret" picking-mode="Ignore" class="turret" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tank-name" picking-mode="Ignore" class="tank-name font-nps" />
+    </TankVisualElement>
+</ui:UXML>

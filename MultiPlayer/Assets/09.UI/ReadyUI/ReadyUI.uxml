@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="TankTemplate" src="project://database/Assets/09.UI/ReadyUI/TankTemplate.uxml?fileID=9197481963319205126&amp;guid=c5145863755054c4c9665ee570a85d08&amp;type=3#TankTemplate" />
+    <ui:Template name="UserTemplate" src="project://database/Assets/09.UI/ReadyUI/UserTemplate.uxml?fileID=9197481963319205126&amp;guid=561e3ff0e0195a645ad3f33a1c395df7&amp;type=3#UserTemplate" />
+    <Style src="project://database/Assets/09.UI/ReadyUI/ReadyUI.uss?fileID=7433441132597879392&amp;guid=63afb40d2f3897d4d8ca21014c31658c&amp;type=3#ReadyUI" />
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=cf43c805a8af7fd4e93b2959e1b0faab&amp;type=3#Common" />
+    <ui:VisualElement name="container">
+        <ui:VisualElement name="panel-box" style="width: 1600px;">
+            <ui:VisualElement name="select-panel-box">
+                <ui:VisualElement name="select-panel">
+                    <ui:Instance template="TankTemplate" name="TankTemplate" />
+                    <ui:Instance template="TankTemplate" name="TankTemplate" />
+                    <ui:Instance template="TankTemplate" name="TankTemplate" />
+                    <ui:Instance template="TankTemplate" name="TankTemplate" />
+                </ui:VisualElement>
+                <ui:VisualElement name="tank-info" class="tank-info">
+                    <ui:Label tabindex="-1" text="탱크를 선택" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tank-name" class="title font-nps-bold" />
+                    <ui:Label tabindex="-1" text="탱크 설명란&#10;공 격 력 : &#10;이동속도 :&#10;최대체력 :" parse-escape-sequences="true" display-tooltip-when-elided="true" name="tank-desc" class="font-nps desc" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="ready-list" class="ready-list" style="flex-grow: 1;">
+                <ui:Instance template="UserTemplate" name="UserTemplate" />
+            </ui:VisualElement>
+            <ui:VisualElement name="button-row" class="button-row" style="flex-grow: 1;">
+                <ui:Button text="Ready" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ready" class="frame-btn-sm frame-btn font-nps-bold" style="flex-grow: 0; margin-right: 20px;" />
+                <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-start" class="frame-btn frame-btn-sm font-nps-bold" style="flex-grow: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

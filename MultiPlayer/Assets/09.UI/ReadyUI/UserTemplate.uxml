@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="user" class="user on">
+        <ui:VisualElement name="ready-icon" style="flex-grow: 1;" />
+        <ui:Label tabindex="-1" text="Gondr99" parse-escape-sequences="true" display-tooltip-when-elided="true" name="user-name" class="font-nps" />
+        <ui:VisualElement name="tank-icon" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

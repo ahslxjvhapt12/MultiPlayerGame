@@ -1,22 +1,53 @@
+.frame-btn {
+    background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=2800000&guid=e3681d0c635b0ab41a42bddd6ff9f1d1&type=3#Frame');
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    -unity-slice-scale: 0.2px;
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    transition-duration: 0.5s;
+    flex-grow: 1;
+}
 .btn {
     background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=2800000&guid=e3681d0c635b0ab41a42bddd6ff9f1d1&type=3#Frame');
-    -unity-slice-left: 0;
-    -unity-slice-top: 0;
-    -unity-slice-right: 0;
-    -unity-slice-bottom: 0;
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    -unity-slice-scale: 0.2px;
+    font-size: 30px;
     color: rgb(0, 0, 0);
-    -unity-text-outline-color: rgb(255, 255, 255);
     -unity-text-outline-width: 1px;
-    background-color: rgb(255, 255, 255);
-    padding-left: 10px;
-    padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 15px;
-    -unity-text-align: middle-center;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    transition-duration: 0.5s;
     flex-grow: 1;
 }
 
+.frame-btn-sm {
+    font-size: 25px;
+}
+
+.frame-btn:hover {
+    -unity-background-image-tint-color: rgb(209, 209, 209);
+}
+
 .btn:hover {
-    -unity-background-image-tint-color: rgb(255, 0, 0);
-    transition-duration: 0.4s;
+    -unity-background-image-tint-color: rgb(209, 209, 209);
+}
+
+
+.font-nps {
+    -unity-font: url('project://database/Assets/09.UI/NPSfont_regular.ttf?fileID=12800000&guid=2f81e810a3cdd01418d362c28ebb31e7&type=3#NPSfont_regular');
+    -unity-font-definition: initial;
+}
+
+.font-nps-bold {
+    -unity-font: url('project://database/Assets/09.UI/NPSfont_bold.ttf?fileID=12800000&guid=2df2774780371d241903bef9e1a7543a&type=3#NPSfont_bold');
+    -unity-font-definition: initial;
 }
