@@ -120,11 +120,11 @@ public class HostGameManager : IDisposable
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
     }
 
-    private async void HandleClientLeft(string authID)
+    private async void HandleClientLeft(UserData userData, ulong authID)
     {
         try
         {
-            await LobbyService.Instance.RemovePlayerAsync(_lobbyId, authID);
+            await LobbyService.Instance.RemovePlayerAsync(_lobbyId, userData.userAuthId);
         }
         catch (LobbyServiceException e)
         {

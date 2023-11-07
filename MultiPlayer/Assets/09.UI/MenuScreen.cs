@@ -27,7 +27,8 @@ public class MenuScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
+        //NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
+
         var root = _uiDocument.rootVisualElement;
         _txtIpAdress = root.Q<TextField>("txt-ip-address");
         _txtPort = root.Q<TextField>("txt-port");

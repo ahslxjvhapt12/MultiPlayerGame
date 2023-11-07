@@ -43,12 +43,11 @@ public class UserListBehaviour : NetworkBehaviour
         if (IsServer)
         {
             UserData userData = HostSingletone.Instance.GameManager.NetworkServer.GetUserDataByClientID(NetworkManager.Singleton.LocalClientId);
+            HandleUserJoin(userData, NetworkManager.Singleton.LocalClientId);
             _readyUI.GameStarted += HandleGameStarted;
 
             HostSingletone.Instance.GameManager.NetworkServer.OnClientJoin += HandleUserJoin;
             HostSingletone.Instance.GameManager.NetworkServer.OnClientLeft += HandleUserLeft;
-
-
         }
     }
 
@@ -95,9 +94,24 @@ public class UserListBehaviour : NetworkBehaviour
         return -1;
     }
 
-    private void HandleUserLeft(string authID)
+    private void HandleUserLeft(UserData userData, ulong clientID)
     {
+        if (_userList == null) return;
 
+        foreach (var item in _userList)
+        {
+            if (item.clientID != clientID) continue;
+
+            try
+            {
+                _userList.Remove(item);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{e} 삭제중 오류 발생");
+            }
+            break;
+        }
     }
 
     private void HandleGameStarted()
@@ -105,12 +119,33 @@ public class UserListBehaviour : NetworkBehaviour
 
     }
 
-    private void HandleTankSelected(int obj)
+    private void HandleTankSelected(int tankID)
     {
+        SelectTankServerRpc(tankID, NetworkManager.Singleton.LocalClientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SelectTankServerRpc(int tankID, ulong clientID)
+    {
+        // 적절하게 타겟을 찾아서
+        // 해당 리스트의 타겟을 갱신
+        // 리스트의 원소를 아예 새롭게갱신
+
+        int idx = FindIndex(clientID);
+
+        UserListEntityState oldUser = _userList[idx];
+        _userList[idx] = new UserListEntityState
+        {
+            clientID = oldUser.clientID,
+            ready = oldUser.ready,
+            playerName = oldUser.playerName,
+            tankID = tankID,
+            combatData = oldUser.combatData,
+        };
 
     }
 
-    private void HandleReadyChanged(bool obj)
+    private void HandleReadyChanged(bool value)
     {
 
     }
@@ -123,8 +158,10 @@ public class UserListBehaviour : NetworkBehaviour
                 _readyUI.AddUserData(evt.Value);
                 break;
             case NetworkListEvent<UserListEntityState>.EventType.Remove:
+                _readyUI.RemoveUserData(evt.Value);
                 break;
             case NetworkListEvent<UserListEntityState>.EventType.Value:
+                _readyUI.UpdateUserData(evt.Value);
                 break;
         }
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
-    public Action<string> OnClientLeft;
+    public Action<UserData, ulong> OnClientLeft;
     public Action<UserData, ulong> OnClientJoin;
 
     private Dictionary<ulong, string> _clientToAuthDictionary = new Dictionary<ulong, string>();
@@ -59,9 +59,10 @@ public class NetworkServer : IDisposable
         if (_clientToAuthDictionary.TryGetValue(clientId, out string authID))
         {
             _clientToAuthDictionary.Remove(clientId);
+            UserData userData = _authToUserDataDictionary[authID];
             _authToUserDataDictionary.Remove(authID);
 
-            OnClientLeft?.Invoke(authID); // 클라이언트 접속 종료시에 알려준다.
+            OnClientLeft?.Invoke(userData, clientId); // 클라이언트 접속 종료시에 알려준다.
         }
     }
 
