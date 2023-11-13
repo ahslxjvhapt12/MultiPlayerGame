@@ -47,6 +47,8 @@ public class NetworkServer : IDisposable
 
         TankPlayer tankComponent = player.GetComponent<TankPlayer>();
         tankComponent.SetTankNetworkVariable(userState);
+
+        tankComponent.SetTankVisualClientRpc(clientID);
     }
 
     private void OnNetworkReady()

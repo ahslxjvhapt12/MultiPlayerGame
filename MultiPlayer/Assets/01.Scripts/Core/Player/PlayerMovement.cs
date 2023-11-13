@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ public class PlayerMovement : NetworkBehaviour
     private Rigidbody2D _rigidbody;
 
     [Header("세팅값들")]
-    [SerializeField] private float _movementSpeed = 4f;
-    [SerializeField] private float _turningRate = 30f;
+    [SerializeField] private NetworkVariable<float> _movementSpeed = new NetworkVariable<float>(4f);
+    [SerializeField] private NetworkVariable<float> _turningRate = new NetworkVariable<float>(30f);
     [SerializeField] private float _dustParticleEmissionValue = 10;
 
     private ParticleSystem.EmissionModule _emissionModule;
@@ -52,7 +53,7 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         // TurningRate속도만큼 _prevMovement에서 X입력이 회전 치를 구해서 
         // 바디 트랜스폼을 회전시켜주면 된다.
-        _bodyTrm.Rotate(new Vector3(0, 0, -_prevMovementInput.x * _turningRate * Time.deltaTime));
+        _bodyTrm.Rotate(new Vector3(0, 0, -_prevMovementInput.x * _turningRate.Value * Time.deltaTime));
 
     }
 
@@ -73,8 +74,13 @@ public class PlayerMovement : NetworkBehaviour
         _prevPosition = transform.position;
 
         // 리지드바디의 속도에다가 바디의 up방향으로 y값을 적용해서 movementSpeed만큼 이동시켜주면 된다.
-        _rigidbody.velocity = _bodyTrm.up * _prevMovementInput.y * _movementSpeed;
+        _rigidbody.velocity = _bodyTrm.up * _prevMovementInput.y * _movementSpeed.Value;
 
     }
 
+    public void SetTankMovement(float moveSpeed, float rotateSpeed)
+    {
+        _movementSpeed.Value = moveSpeed;
+        _turningRate.Value = rotateSpeed;
+    }
 }

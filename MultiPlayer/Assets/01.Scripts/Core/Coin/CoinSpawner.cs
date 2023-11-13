@@ -31,6 +31,7 @@ public class CoinSpawner : NetworkBehaviour
     private Stack<RespawningCoin> _coinPool = new Stack<RespawningCoin>(); // 코인 풀
     private List<RespawningCoin> _activeCoinList = new List<RespawningCoin>(); // 코인이 스폰되면 들어올 리스트
 
+    private bool _startGame = false;
 
     private RespawningCoin SpawnCoin()
     {
@@ -78,6 +79,7 @@ public class CoinSpawner : NetworkBehaviour
     {
         if (!IsServer) return; // 서버가 아니면 걍 스킵    
 
+        if (!_startGame) return;
         // 현재 스포닝이 시작되지 않았고 생성된 코인이 아무것도 없다면 코인 스포닝 타이밍을 재기 시작
         if (!_isSpawning && _activeCoinList.Count == 0)
         {
@@ -156,6 +158,11 @@ public class CoinSpawner : NetworkBehaviour
     {
         yield return new WaitForSeconds(time);
         point.BlinkIcon(false);
+    }
+
+    public void StartSpawn()
+    {
+        _startGame = true;
     }
 
     #endregion

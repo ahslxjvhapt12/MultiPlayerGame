@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +11,7 @@ public class ProjectileLauncher : NetworkBehaviour
 {
     [Header("참조 변수들")]
     [SerializeField] private InputReader _inputReader;
-    [SerializeField] private Transform _projectileSpawnTrm;
+    //[SerializeField] private Transform _projectileSpawnTrm;
     [SerializeField] private GameObject _serverProjectilePrefab;
     [SerializeField] private GameObject _clientProjectilePrefab;
     [SerializeField] private Collider2D _playerCollider;
@@ -20,6 +22,8 @@ public class ProjectileLauncher : NetworkBehaviour
 
     private bool _shouldFire;
     private float _prevFireTime;
+    private NetworkVariable<int> _damage = new NetworkVariable<int>();
+    private List<Transform> _firePosTrm = new List<Transform>();
 
     public UnityEvent OnFire;
 
@@ -46,9 +50,12 @@ public class ProjectileLauncher : NetworkBehaviour
         if (!_shouldFire) return;
 
         if (Time.time < _prevFireTime + _fireCooltime) return;
+        foreach (Transform t in _firePosTrm)
+        {
+            PrimaryFireServerRPC(t.position, t.up);
+            SpawnDummyProjectile(t.position, t.up);
+        }
 
-        PrimaryFireServerRPC(_projectileSpawnTrm.position, _projectileSpawnTrm.up);
-        SpawnDummyProjectile(_projectileSpawnTrm.position, _projectileSpawnTrm.up);
         _prevFireTime = Time.time;
     }
 
@@ -66,6 +73,12 @@ public class ProjectileLauncher : NetworkBehaviour
         if (instance.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody))
         {
             rigidbody.velocity = rigidbody.transform.up * _projectileSpeed;
+        }
+
+        if (instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact dealContact))
+        {
+            dealContact.SetDamage(_damage.Value);
+            dealContact.SetOwner(OwnerClientId);
         }
 
         SpawnDummyProjectileClientRPC(position, dir);
@@ -90,5 +103,28 @@ public class ProjectileLauncher : NetworkBehaviour
         {
             rigidbody.velocity = rigidbody.transform.up * _projectileSpeed;
         }
+    }
+
+    public void SetDamage(int damage)
+    {
+        _damage.Value = damage;
+    }
+
+    public void SetFirePos(Vector3[] firePos)
+    {
+        // 터렛의 TurretPivot의 Turret을 찾아와서
+        Transform parent = transform.Find("TurretPivot/Turret");
+        // firePos의 우치에다가 새로운 게임오브젝트를 만들어서
+        foreach (Vector3 point in firePos)
+        {
+            GameObject spawnPoint = new GameObject();
+            spawnPoint.transform.SetParent(parent);
+            spawnPoint.transform.localPosition = point;
+
+            _firePosTrm.Add(spawnPoint.transform);
+        }
+        // 아까 찾은 Turret에 자식으로 걔를 붙여주면 된다.
+        // 자식으로 붙여준 게임오브젝트의 transform을
+        // firePosTrm 리스트에 딸칵 넣어주면 완성된다.
     }
 }

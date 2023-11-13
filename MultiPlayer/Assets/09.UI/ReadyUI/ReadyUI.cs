@@ -55,6 +55,21 @@ public class ReadyUI : MonoBehaviour
         _readyBtn = root.Q<Button>("btn-ready");
         _startBtn = root.Q<Button>("btn-start");
 
+        _readyBtn.RegisterCallback<ClickEvent>(HandleReadyClick);
+        _startBtn.RegisterCallback<ClickEvent>(HandleGameStart);
+
+        _startBtn.SetEnabled(false);
+    }
+
+    private void HandleGameStart(ClickEvent evt)
+    {
+        GameStarted?.Invoke();
+    }
+
+    private void HandleReadyClick(ClickEvent evt)
+    {
+        _isReady = !_isReady; // 반전시키고
+        ReadyChanged?.Invoke(_isReady);
     }
 
     private void HandleTankClick(ClickEvent evt)
@@ -121,5 +136,23 @@ public class ReadyUI : MonoBehaviour
         UserUI userUI = _userDictionary[userData.clientID];
         userUI.SetTank(sprite);
         userUI.SetReady(userData.ready);
+    }
+
+    public void SetHost(bool isHost)
+    {
+        if (!isHost)
+        {
+            _startBtn.style.visibility = Visibility.Hidden;
+        }
+    }
+
+    public void ReadyToStart(bool value)
+    {
+        _startBtn.SetEnabled(value); // 모두 준비가 완료되었다면 버튼 활성화
+    }
+
+    public void HideFromScreen()
+    {
+        _uiDocument.enabled = false;
     }
 }

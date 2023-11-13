@@ -1,7 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,6 +24,7 @@ public class MapManager : MonoBehaviour
 
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private LayerMask _whatIsObstacle;
+    [SerializeField] private Tilemap _safezoneMap;
 
     public List<Vector3> GetAvailablePositionList(Vector3 center, float radius)
     {
@@ -54,5 +53,12 @@ public class MapManager : MonoBehaviour
             }
         }
         return pointList;
+    }
+
+    public bool InSafeZone(Vector3 worldPos)
+    {
+        Vector3Int pos = _safezoneMap.WorldToCell(worldPos);
+        TileBase tile = _safezoneMap.GetTile(pos);
+        return tile != null;
     }
 }

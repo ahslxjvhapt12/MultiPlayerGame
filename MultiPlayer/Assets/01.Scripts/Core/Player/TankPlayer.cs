@@ -17,7 +17,7 @@ public class TankPlayer : NetworkBehaviour
     [SerializeField] private SpriteRenderer _turretSprite;
 
     [field: SerializeField] public Health HealthCompo { get; private set; }
-    [field: SerializeField] public CoinCollector Coin {  get; private set; }
+    [field: SerializeField] public CoinCollector Coin { get; private set; }
 
     [Header("세팅값")]
     [SerializeField] private int _ownerCamPriority;
@@ -50,14 +50,30 @@ public class TankPlayer : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        if(IsServer)
+        if (IsServer)
         {
             OnPlayerDespawned?.Invoke(this);
         }
     }
 
-    public void SetTankNetworkVariable(object userData)
+    public void SetTankNetworkVariable(UserListEntityState userState)
     {
-        
+        var tankData = UserListBehaviour.Instance.GetTankDataSO(userState.tankID);
+        _movement.SetTankMovement(userState.combatData.moveSpeed, userState.combatData.rotateSpeed);
+        _launcher.SetDamage(tankData.basicTurretSO.damage);
+    }
+
+    [ClientRpc]
+    public void SetTankVisualClientRpc(ulong clientID)
+    {
+        var user = UserListBehaviour.Instance.GetUserEntity(clientID);
+        var tankData = UserListBehaviour.Instance.GetTankDataSO(user.tankID);
+
+        // 몸통, 터렛 스프라이트 교체
+
+        _turretSprite.sprite = tankData.basicTurretSprite;
+        _bodySprite.sprite = tankData.bodySprite;
+        _launcher.SetFirePos(tankData.basicTurretSO.firePos);
+
     }
 }

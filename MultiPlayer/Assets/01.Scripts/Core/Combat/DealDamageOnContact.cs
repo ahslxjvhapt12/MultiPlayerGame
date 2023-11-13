@@ -1,17 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 
 public class DealDamageOnContact : MonoBehaviour
 {
-    [SerializeField] private int _damage = 10;
+    private int _damage = 10;
 
+    private ulong _ownerClientID;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void SetDamage(int value)
     {
-        if (collision.attachedRigidbody is null) return;
+        _damage = value;
+    }
 
-        if (collision.attachedRigidbody.TryGetComponent<Health>(out Health h))
+    public void SetOwner(ulong ownerClientId)
+    {
+        _ownerClientID = ownerClientId;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.attachedRigidbody is null) return;
+
+        if(other.attachedRigidbody.TryGetComponent<NetworkObject>(out NetworkObject netObj))
+        {
+            if (netObj.OwnerClientId == _ownerClientID) return;
+        }
+
+        if (other.attachedRigidbody.TryGetComponent<Health>(out Health h))
         {
             h.TakeDamage(_damage);
         }

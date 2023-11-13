@@ -9,6 +9,7 @@ public class UserListBehaviour : NetworkBehaviour
 {
     [SerializeField] private ReadyUI _readyUI;
     [SerializeField] private List<TankDataSO> _tankDatas;
+    [SerializeField] private CoinSpawner _coinSpawner; 
 
     public static UserListBehaviour Instance;
     public NetworkList<UserListEntityState> _userList = new NetworkList<UserListEntityState>();
@@ -116,7 +117,37 @@ public class UserListBehaviour : NetworkBehaviour
 
     private void HandleGameStarted()
     {
+        for (int i = 0; i < _userList.Count; ++i)
+        {
+            var user = _userList[i];
+            TankDataSO tankData = GetTankDataSO(user.tankID);
 
+            user.combatData = new TankCombatData
+            {
+                moveSpeed = tankData.moveSpeed,
+                damage = tankData.basicTurretSO.damage,
+                rotateSpeed = tankData.rotateSpeed,
+                maxHP = tankData.maxHP,
+            };
+
+            // 여기서 탱크를 스폰하도록 코드를 작성한다.
+            HostSingletone.Instance.GameManager.NetworkServer.SpawnPlayer(user.clientID, user);
+        }
+
+        GameStartClientRpc();
+        _coinSpawner.StartSpawn();
+    }
+
+    public TankDataSO GetTankDataSO(int tankID)
+    {
+        return _tankDatas.Find(x => x.tankID == tankID);
+    }
+
+    [ClientRpc]
+    private void GameStartClientRpc()
+    {
+        Debug.Log("알삐씨콜ㄹ");
+        _readyUI.HideFromScreen();
     }
 
     private void HandleTankSelected(int tankID)
@@ -147,7 +178,44 @@ public class UserListBehaviour : NetworkBehaviour
 
     private void HandleReadyChanged(bool value)
     {
+        SetReadyServerRpc(value, NetworkManager.Singleton.LocalClientId);
+    }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void SetReadyServerRpc(bool readyValue, ulong clientId)
+    {
+        int idx = FindIndex(clientId);
+
+        var oldItem = _userList[idx];
+
+        _userList[idx] = new UserListEntityState
+        {
+            clientID = oldItem.clientID,
+            ready = readyValue,
+            playerName = oldItem.playerName,
+            tankID = oldItem.tankID,
+            combatData = oldItem.combatData
+        };
+
+
+        _readyUI.ReadyToStart(CheckAllReady());
+    }
+
+    // 전체가 다 레디상태일때 true를 리턴하겠지
+    private bool CheckAllReady()
+    {
+        bool result = true;
+
+        foreach (var user in _userList)
+        {
+            if (!user.ready)
+            {
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
     private void HandleUserListChanged(NetworkListEvent<UserListEntityState> evt)
@@ -164,5 +232,10 @@ public class UserListBehaviour : NetworkBehaviour
                 _readyUI.UpdateUserData(evt.Value);
                 break;
         }
+    }
+
+    public UserListEntityState GetUserEntity(ulong clientID)
+    {
+        return _userList[FindIndex(clientID)];
     }
 }
