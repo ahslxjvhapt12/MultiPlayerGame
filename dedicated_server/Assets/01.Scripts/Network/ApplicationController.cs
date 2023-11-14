@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ApplicationController : MonoBehaviour
 {
@@ -29,7 +30,10 @@ public class ApplicationController : MonoBehaviour
         }
         else
         {
-            //클라이언트 만들어주고
+            ClientSingleton client = Instantiate(_clientPrefab, transform);
+            client.CreateClient(_ipAddress, _port);
+
+            SceneManager.LoadScene(SceneList.Menu);
         }
     }
 }

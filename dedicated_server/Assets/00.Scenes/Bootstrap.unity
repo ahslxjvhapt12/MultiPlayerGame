@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 0}
   _serverPrefab: {fileID: 4331929856067194086, guid: a035682fe8403fe4d82b4ebfd12d2308, type: 3}
-  _clientPrefab: {fileID: 0}
+  _clientPrefab: {fileID: 4535526284189020361, guid: 2f410d8e300cb40448a4bffe6ed15da7, type: 3}
   _ipAddress: 127.0.0.1
   _port: 7777
 --- !u!1660057539 &9223372036854775807

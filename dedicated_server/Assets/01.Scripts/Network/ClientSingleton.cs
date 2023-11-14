@@ -1,18 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 public class ClientSingleton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static ClientSingleton _instance;
+    public static ClientSingleton Instance
     {
-        
+        get
+        {
+            if (_instance != null) return _instance;
+            _instance = FindObjectOfType<ClientSingleton>();
+
+            if (_instance == null)
+            {
+                Debug.LogError("Client singleton does not exists");
+            }
+            return _instance;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public ClientGameManager GameManager { get; private set; }
+    private string _ip;
+    private ushort _port;
+
+    public void CreateClient(string ip, ushort port)
     {
-        
+        GameManager = new ClientGameManager();
+        _ip = ip;
+        _port = port;
+    }
+
+    public void StartClient(UserData userData)
+    {
+        UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.SetConnectionData(_ip, _port);
+        GameManager.ConnectClient(userData);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager?.Dispose();
     }
 }
