@@ -28,8 +28,7 @@ public class NetworkServer : IDisposable
         _networkManager.OnServerStarted += HandleServerStarted;
     }
 
-    private void HandleConnectionApproval(NetworkManager.ConnectionApprovalRequest req, 
-                            NetworkManager.ConnectionApprovalResponse res)
+    private void HandleConnectionApproval(NetworkManager.ConnectionApprovalRequest req, NetworkManager.ConnectionApprovalResponse res)
     {
         string json = Encoding.UTF8.GetString(req.Payload);
         UserData userData = JsonUtility.FromJson<UserData>(json);
@@ -50,12 +49,25 @@ public class NetworkServer : IDisposable
 
     private void HandleClientConnect(ulong clientID)
     {
+        NetworkObject instance = GameObject.Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity);
+        instance.SpawnAsPlayerObject(clientID);
+
+        UserData userData = _clientIdToUserDataDictionary[clientID];
         
+        if(instance.TryGetComponent<Player>(out Player player))
+        {
+            Debug.Log($"{userData.username} is Create complete!");
+            player.SetUserName(userData.username);
+        }
+        else
+        {
+            Debug.LogError($"{userData.username} : Create failed!");
+        }
     }
 
     private void HandleClientDisconnect(ulong clientID)
     {
-        
+
     }
 
     public bool OpenConnection(string ipAddress, ushort port)
@@ -68,15 +80,14 @@ public class NetworkServer : IDisposable
     public void Dispose()
     {
         if (_networkManager == null) return;
-        _networkManager.ConnectionApprovalCallback  -= HandleConnectionApproval;
-        _networkManager.OnServerStarted             -= HandleServerStarted;
-        _networkManager.OnClientConnectedCallback   -= HandleClientConnect;
-        _networkManager.OnClientDisconnectCallback  -= HandleClientDisconnect;
+        _networkManager.ConnectionApprovalCallback -= HandleConnectionApproval;
+        _networkManager.OnServerStarted -= HandleServerStarted;
+        _networkManager.OnClientConnectedCallback -= HandleClientConnect;
+        _networkManager.OnClientDisconnectCallback -= HandleClientDisconnect;
 
-        if(_networkManager.IsListening)  //서버가 리스닝
+        if (_networkManager.IsListening)  //서버가 리스닝
         {
             _networkManager.Shutdown();
         }
-
     }
 }
