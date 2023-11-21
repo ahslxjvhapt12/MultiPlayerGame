@@ -31,11 +31,11 @@ public class PlayerMovement : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        _playerAnimation.SetMove(_rigidbody2D.velocity.magnitude > 0.1f);
+        _playerAnimation.FilpController(_rigidbody2D.velocity.x);
+        
         if (!IsOwner) return;
 
         _rigidbody2D.velocity = _movementInput * _movementSpeed;
-
-        _playerAnimation.SetMove(_rigidbody2D.velocity.magnitude > 0.1f);
-        _playerAnimation.FilpController(_rigidbody2D.velocity.x);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +8,12 @@ public class ServerSingleton : MonoBehaviour
     private static ServerSingleton _instance;
     public static ServerSingleton Instance
     {
-        get {
+        get
+        {
             if (_instance != null) return _instance;
             _instance = FindObjectOfType<ServerSingleton>();
 
-            if(_instance == null)
+            if (_instance == null)
             {
                 Debug.LogError("Server singleton does not exists");
             }
@@ -25,7 +27,7 @@ public class ServerSingleton : MonoBehaviour
     {
         NetServer = new NetworkServer(playerPrefab);
 
-        if(NetServer.OpenConnection(ipAddress, port))
+        if (NetServer.OpenConnection(ipAddress, port))
         {
             NetworkManager.Singleton.SceneManager.LoadScene(SceneList.Game, LoadSceneMode.Single);
             Debug.Log($"{ipAddress} : {port.ToString()} : Server launching!!");
@@ -35,9 +37,8 @@ public class ServerSingleton : MonoBehaviour
             Debug.LogError($"{ipAddress} : {port.ToString()} : Server launching failed!");
         }
 
-        
-    }
 
+    }
 
     private void OnDestroy()
     {

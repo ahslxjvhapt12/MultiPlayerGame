@@ -77,6 +77,16 @@ public class NetworkServer : IDisposable
         return _networkManager.StartServer();
     }
 
+    public UserData GetUserDataByClientID(ulong clientID)
+    {
+        if (_clientIdToUserDataDictionary.TryGetValue(clientID, out UserData userData))
+        {
+            return userData;
+        }
+        else
+            return null;
+    }
+
     public void Dispose()
     {
         if (_networkManager == null) return;
