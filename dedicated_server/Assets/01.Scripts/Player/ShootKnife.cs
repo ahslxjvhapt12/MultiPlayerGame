@@ -64,8 +64,11 @@ public class ShootKnife : NetworkBehaviour
     {
         // 이 기사 오브젝트의 주인의 아이디로 이름, 기타 등등을 알아낸다
         UserData user = ServerSingleton.Instance.NetServer.GetUserDataByClientID(OwnerClientId);
+
+        Debug.Log($"{user.username} : launch knife pos : {pos}, dir : {dir}");
         var instance = Instantiate(_serverKnife, pos, Quaternion.identity);
         instance.transform.right = dir;
+
         Physics2D.IgnoreCollision(_playerCollider, instance.GetComponent<CircleCollider2D>());
 
         if (instance.TryGetComponent<Rigidbody2D>(out Rigidbody2D _rigid))
@@ -73,7 +76,7 @@ public class ShootKnife : NetworkBehaviour
             _rigid.velocity = dir * _knifeSpeed;
         }
 
-        if(instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact damage))
+        if (instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact damage))
         {
             damage.SetDamage(_knifeDamage);
             damage.SetOwner(OwnerClientId);

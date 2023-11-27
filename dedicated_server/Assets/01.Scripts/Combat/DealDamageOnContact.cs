@@ -20,9 +20,13 @@ public class DealDamageOnContact : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Health>(out Health health))
+        Debug.Log($"{collision.gameObject.name} is hit");
+
+        if (collision.attachedRigidbody == null) return;
+
+        if (collision.attachedRigidbody.TryGetComponent<Health>(out Health health))
         {
-            health.TakeDamage(_damage);
+            health.TakeDamage(_damage, _ownerclientID);
         }
     }
 }

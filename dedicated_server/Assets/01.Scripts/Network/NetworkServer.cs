@@ -14,6 +14,9 @@ public class NetworkServer : IDisposable
 {
     public delegate void UserChanged(ulong clientID, UserData userData);
 
+    public event UserChanged OnUserJoin;
+    public event UserChanged OnUserLeft;
+
     private NetworkObject _playerPrefab;
     private NetworkManager _networkManager;
 
@@ -49,12 +52,31 @@ public class NetworkServer : IDisposable
 
     private void HandleClientConnect(ulong clientID)
     {
+        RespawnPlayer(clientID);
+
+        if (_clientIdToUserDataDictionary.TryGetValue(clientID, out UserData userdata))
+        {
+            OnUserJoin?.Invoke(clientID, userdata);
+        }
+    }
+
+    private void HandleClientDisconnect(ulong clientID)
+    {
+        if (_clientIdToUserDataDictionary.TryGetValue(clientID, out UserData userData))
+        {
+            _clientIdToUserDataDictionary.Remove(clientID);
+        }
+    }
+
+    public void RespawnPlayer(ulong clientID)
+    {
+        // 여기서 위쪽에 플레이어를 스폰하는 코드를 잘 참조해서 리스폰 시켜주면 된다.
         NetworkObject instance = GameObject.Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity);
         instance.SpawnAsPlayerObject(clientID);
 
         UserData userData = _clientIdToUserDataDictionary[clientID];
-        
-        if(instance.TryGetComponent<Player>(out Player player))
+
+        if (instance.TryGetComponent<Player>(out Player player))
         {
             Debug.Log($"{userData.username} is Create complete!");
             player.SetUserName(userData.username);
@@ -63,11 +85,6 @@ public class NetworkServer : IDisposable
         {
             Debug.LogError($"{userData.username} : Create failed!");
         }
-    }
-
-    private void HandleClientDisconnect(ulong clientID)
-    {
-
     }
 
     public bool OpenConnection(string ipAddress, ushort port)

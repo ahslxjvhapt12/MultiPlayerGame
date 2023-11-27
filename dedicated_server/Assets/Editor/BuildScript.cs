@@ -33,6 +33,13 @@ public class BuildScript
         BuildClientNumber(2);
     }
 
+    [MenuItem("Builder/ServerAndClient")]
+    public static void BuilderServerAndClient()
+    {
+        BuildDedicatedServer();
+        BuildClientNumber(1);
+    }
+
     private static void BuildClientNumber(int number)
     {
         BuildPlayerOptions buildOption = new BuildPlayerOptions();
