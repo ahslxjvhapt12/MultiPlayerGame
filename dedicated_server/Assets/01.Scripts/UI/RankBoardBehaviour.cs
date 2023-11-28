@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RankBoardBehaviour : NetworkBehaviour
@@ -24,10 +23,13 @@ public class RankBoardBehaviour : NetworkBehaviour
         if (IsClient)
         {
             _rankList.OnListChanged += HandleRankListChanged;
-            foreach (var r in _rankList)
+            foreach (var entitiy in _rankList)
             {
-                var instance = Instantiate(_recordPrefab, _recordParentTrm);
-                _rankUIList.Add(instance);
+                HandleRankListChanged(new NetworkListEvent<RankBoardEntityState>
+                {
+                    Type = NetworkListEvent<RankBoardEntityState>.EventType.Add,
+                    Value = entitiy
+                });
             }
         }
 
@@ -61,23 +63,51 @@ public class RankBoardBehaviour : NetworkBehaviour
 
     private void HandleUserJoin(ulong clientID, UserData userData)
     {
-        var instance = new RankBoardEntityState();
-        instance.clientID = clientID;
-        instance.playerName = ServerSingleton.Instance.NetServer.GetUserDataByClientID(clientID).username;
-        _rankList.Add(instance);
+        _rankList.Add(new RankBoardEntityState
+        {
+            clientID = clientID,
+            playerName = userData.username,
+            score = 0
+        });
         //랭킹보드에 추가를 해줘야겠지? 알잘딱으로(리스트에서)
     }
 
     private void HandleUserLeft(ulong clientID, UserData userData)
     {
-        foreach (var instance in _rankList)
+        foreach (var entity in _rankList)
         {
-            if (instance.clientID == clientID)
+            if (entity.clientID != clientID) continue;
+
+            try
             {
-                _rankList.Remove(instance);
+                _rankList.Remove(entity);
             }
+            catch (Exception ex)
+            {
+                Debug.LogError($"{entity.playerName} [ {entity.clientID} ] : 삭제중 오류 발생\n {ex.Message}");
+            }
+            break;
         }
         //랭킹보드에서 해당 클라이언트 아이디를 제거해줘야겠지?(리스트에서)
+    }
+
+    // 서버가 이걸 실행하는거임. 클라는 노놉
+    public void HandleChangeScore(ulong clientID, int score)
+    {
+        for (int i = 0; i < _rankList.Count; ++i)
+        {
+            if (_rankList[i].clientID != clientID) continue;
+
+            var oldItem = _rankList[i];
+            _rankList[i] = new RankBoardEntityState
+            {
+                clientID = clientID,
+                playerName = oldItem.playerName,
+                score = score
+            };
+
+            break;
+        }
     }
 
     private void HandleRankListChanged(NetworkListEvent<RankBoardEntityState> evt)
@@ -91,22 +121,29 @@ public class RankBoardBehaviour : NetworkBehaviour
                 RemoveFromUIList(evt.Value.clientID);
                 break;
             case NetworkListEvent<RankBoardEntityState>.EventType.Value:
+                AdjustScoreToUIList(evt.Value);
                 break;
         }
     }
 
+    private void AdjustScoreToUIList(RankBoardEntityState value)
+    {
+        // 값을 받아서 해당 UI를 찾아서 (올바른 클라이언트 ID) score를 갱신한다
+        // 선택 : 갱신후에는 UIList 를 정렬하고
+        // 정렬된 순서에 맞춰서 실제 UI의 순서도 변경한다.
+    }
+
     private void AddUIToList(RankBoardEntityState value)
     {
-        foreach (var item in _rankUIList)
-        {
-            if (item.clientID == value.clientID) return;
-        }
+        var target = _rankUIList.Find(x => x.clientID == value.clientID);
+        if (target != null) return;
 
-        var instance = Instantiate(_recordPrefab, _recordParentTrm);
-        instance.SetOwner(value.clientID);
-        instance.SetText(1, ServerSingleton.Instance.NetServer.GetUserDataByClientID(value.clientID).username, 0);
-        _rankUIList.Add(instance);
+        RecordUI newUI = Instantiate(_recordPrefab, _recordParentTrm);
+        newUI.SetOwner(value.clientID);
+        newUI.SetText(1, value.playerName.ToString(), value.score);
 
+
+        _rankUIList.Add(newUI);
         //중복이 있는지 검사후에 만들어서 
         //만들때 clientID넣어주는거 잊지말자.
         //UI에 추가하고 차후 중복검사를 위해서 _rankUIList 에도 넣어준다.
@@ -114,11 +151,11 @@ public class RankBoardBehaviour : NetworkBehaviour
 
     private void RemoveFromUIList(ulong clientID)
     {
-        var instance = _rankUIList.FirstOrDefault((x) => x.clientID == clientID);
-        if (instance != null)
+        var target = _rankUIList.FirstOrDefault((x) => x.clientID == clientID);
+        if (target != null)
         {
-            _rankUIList.Remove(instance);
-            Destroy(instance.gameObject);
+            _rankUIList.Remove(target);
+            Destroy(target.gameObject);
         }
         //_rankUIList 에서 clientID가 일치하는 녀석을 찾아서 리스트에서 제거하고
         // 해당 게임오브젝트를 destroy()

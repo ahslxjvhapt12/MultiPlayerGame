@@ -22,19 +22,18 @@ public class RespawnManager : NetworkBehaviour
 
     private void HandlePlayerDespawn(Player player)
     {
-        ulong ownerID = player.HealthCompo.OwnerClientId;
         ulong killerID = player.HealthCompo.LastHitDealerID;
-        UserData killerData = ServerSingleton.Instance.NetServer.GetUserDataByClientID(killerID);
+        UserData killerUserdata = ServerSingleton.Instance.NetServer.GetUserDataByClientID(killerID);
+        UserData victimUserData = ServerSingleton.Instance.NetServer.GetUserDataByClientID(player.OwnerClientId);
 
-        if (killerData != null)
+        if (victimUserData != null)
         {
-            Debug.Log($"{ownerID} 님이 죽었습니다. by {killerData.username}");
+            Debug.Log($"{victimUserData.username} is dead by {killerUserdata.username} [{killerID}]");
+
+            //실제로 서버에서 3초후 리스폰 되도록 함수를 만들어
+            StartCoroutine(DelayRespawn(player.OwnerClientId));
         }
-        // 누가 죽였는지 알아내서 로그를 찍자
-        // ownerID 님이 죽었습니다. (by KillerName);
-        //LastHitDealerID
-        // 실제로 서버에서 3초후 리스폰 되도록 함수를 만들자
-        StartCoroutine(DelayRespawn(ownerID));
+
     }
 
     IEnumerator DelayRespawn(ulong ownerID)

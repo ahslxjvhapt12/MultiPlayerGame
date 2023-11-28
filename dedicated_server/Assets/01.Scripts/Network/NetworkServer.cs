@@ -64,6 +64,7 @@ public class NetworkServer : IDisposable
     {
         if (_clientIdToUserDataDictionary.TryGetValue(clientID, out UserData userData))
         {
+            OnUserLeft?.Invoke(clientID, userData);
             _clientIdToUserDataDictionary.Remove(clientID);
         }
     }
